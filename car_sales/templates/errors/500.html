@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Internal Server Error
+{% endblock %}
+
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="container text-center">
+        <div class="col-md-12">
+            <h2>
+                Unexpected Server Error
+            </h2>
+        </div>
+        <div class="image-responsive">
+            <img src="{{url_for('static', filename='img/500.png')}}")/>
+        </div>
+        <div class="col-md-12">
+            <p>Please contact horan5034@gmail.com to inform him of his mistake.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}

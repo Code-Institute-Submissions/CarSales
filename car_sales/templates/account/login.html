@@ -1,0 +1,46 @@
+{% extends"base.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <h1 class="text-center" style="clear: both">
+            Enter Login Details
+        </h1>
+        <form action="" method="post">
+            {{ form.hidden_tag() }}
+            {{ render_field(form.email,  class='form-control', type='text') }}
+            {{ render_field(form.password,  class='form-control', type='password') }}
+            {{ render_field(form.remember_me, class='form-check', type='radio') }}
+            {{ render_field(form.submit, class='btn btn-primary') }}
+        </form>
+        <p class="text-center">Don't have an account. Why not <a href="{{ url_for('signup') }}">Sign Up</a></p>
+    </div>
+{% endblock %}
+
+{% block messages %}
+    <div class="row">
+        <article class="flashes" style="margin-left:40%;">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </article>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+

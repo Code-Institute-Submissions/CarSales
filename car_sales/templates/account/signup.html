@@ -1,0 +1,51 @@
+{% extends"base.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <section>
+            <h1 class="text-center" style="clear: both">
+                Enter New User Details
+            </h1>
+            <form action="" method="post">
+                {{ form.hidden_tag() }}
+                <div class="container">
+                    {{ render_field(form.first_name, size=25, class='form-control', type='text') }}
+                    {{ render_field(form.last_name, size=25, class='form-control', type='text') }}
+                    {{ render_field(form.email, size=25, class='form-control', type='email') }}
+                    {{ render_field(form.password, size=25, class='form-control', type='password') }}
+                    {{ render_field(form.password2, size=25, class='form-control', type='password') }}
+                    {{ render_field(form.submit, class='btn btn-primary') }}
+                </div>
+            </form>
+        </section>
+    </div>
+{% endblock %}
+
+{% block messages %}
+    <div class="row">
+        <article class="flashes" style="margin-left:40%;">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </article>
+    </div>
+{% endblock %}
+
+{% block sidebar %}
+{% endblock %}
+

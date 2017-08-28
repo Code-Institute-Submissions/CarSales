@@ -1,0 +1,49 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <style>
+            body {
+                padding-top: 50px;
+                padding-bottom: 20px;
+            }
+        </style>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='font-awesome/css/font-awesome.min.css') }}">
+
+        <!-- Font Link -->
+        <link href="https://fonts.googleapis.com/css?family=Kanit" rel="stylesheet">
+
+        <script src="/static/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+    </head>
+    <body>
+        {% include 'shared/navbar.html' %}
+        <hr>
+        <div class="container" style="height: 90%;">
+            <div class="main-wrapper clearfix">
+                {% block jumbotron %}
+                {% endblock %}
+
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+        {% block messages %}
+        {% endblock %}
+
+        {% include 'shared/footer.html' %}
+
+        {% block scripts %}
+        <script src="{{ url_for ('static', filename='js/jquery.min.js')}}"></script>
+        <script src="{{ url_for ('static', filename='js/bootstrap.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>
