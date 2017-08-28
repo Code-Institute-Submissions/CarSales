@@ -66,7 +66,7 @@ def edit_user(user_id):
             user.is_active = True
 
         db.session.commit()
-        return redirect(url_for('user_management'))
+        return redirect(url_for('user_table'))
     return render_template("admin/edit_user.html", user=user, form=form)
 
 
@@ -74,7 +74,18 @@ def edit_user(user_id):
 @login_required
 def user_table():
     users = Users.get_all_users()
-    return render_template("admin/edit_user.html", users=users)
+    return render_template("admin/user_table.html", users=users)
+
+
+@app.route("/admin/user/disable/<int:user_id>", methods=["Get"])
+@login_required
+def disable_user(user_id):
+    user = Users.get_user(user_id)
+    user.is_active = False
+    db.session.commit()
+
+    users = Users.get_all_users()
+    return render_template("admin/user_table.html", users=users)
 
 
 @app.errorhandler(404)
