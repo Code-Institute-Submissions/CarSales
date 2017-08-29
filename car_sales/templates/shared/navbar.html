@@ -14,7 +14,8 @@
             </div>
             <div class="pull-right">
                 {% if current_user.is_authenticated %}
-                    <a class="navbar-brand" href="{{ url_for('home') }}">Catalog</a>
+                    <a class="navbar-brand" href="{{ url_for('home') }}">New Stock</a>
+                    <a class="navbar-brand" href="{{ url_for('show_all_used_stock') }}">Used Stock</a>
                     <a class="navbar-brand" href="{{ url_for('home') }}">History</a>
                     <a class="navbar-brand" href="{{ url_for('user_table') }}">Users</a>
                     <a class="navbar-brand" href="{{ url_for('logout') }}">Log Out</a>

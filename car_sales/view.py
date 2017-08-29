@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for, request, abort, jso
 from form import LoginForm, SignupForm, EditUser
 from car_sales import app, login_manager, db
 from flask_login import login_required, login_user, logout_user, current_user
-from model import Users, CarSale, Stock
+from model import Users, CarSale, UsedStock
 from datetime import datetime
 
 
@@ -86,6 +86,14 @@ def disable_user(user_id):
 
     users = Users.get_all_users()
     return render_template("admin/user_table.html", users=users)
+
+
+@app.route("/stock/used_stock")
+@login_required
+def show_all_used_stock():
+    all_used_stock = UsedStock.get_all_used_stock();
+
+    return render_template("stock/all_used_stock.html", all_used_stock=all_used_stock)
 
 
 @app.errorhandler(404)

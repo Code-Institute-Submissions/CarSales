@@ -4,23 +4,31 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
 
-class Stock(db.Model):
-    __tablename__ = 'stock'
+class UsedStock(db.Model):
+    __tablename__ = 'used_stock'
     __table_args__ = {'extend_existing': 'True'}
     id = db.Column(db.Integer, primary_key=True)
     make = db.Column(db.String(50), nullable=False)
-    model = db.Column(db.String(100), nullable=True)
-    price = db.Column(db.Integer, nullable=True)
+    model = db.Column(db.String(100), nullable=False)
+    mileage = db.Column(db.String(10), nullable=True)
+    year = db.Column(db.Integer, nullable=True)
+    fuel_type = db.Column(db.String(10), nullable=True)
+    engine_size = db.Column(db.String(8), nullable=True)
+    seats = db.Column(db.Integer, nullable=True)
+    colour = db.Column(db.String(10), nullable=True)
+    transmission = db.Column(db.String(12), nullable=True)
     image_location = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float(6, 2), nullable=False)
+    description = db.Column(db.String(3000), nullable=False)
     sold = db.Column(db.Boolean, nullable=False)
 
     @staticmethod
-    def get_all_items():
-        return Stock.query.all()
+    def get_all_used_stock():
+        return UsedStock.query.all()
 
     @staticmethod
-    def get_item_by_id(stock_id):
-        return Stock.query.filter_by(id=stock_id).first_or_404()
+    def get_used_stock_by_id(stock_id):
+        return UsedStock.query.filter_by(id=stock_id).first_or_404()
 
 
 class Users (db.Model, UserMixin):
@@ -65,7 +73,9 @@ class CarSale(db.Model):
     __table_args__ = {'extend_existing': 'True'}
     id = db.Column(db.Integer, primary_key=True)
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
-
+    used_stock_id = db.Column(db.Integer, db.ForeignKey("used_stock.id"))
+    used_stock = db.relationship('UsedStock', lazy='joined',
+                                 backref=db.backref('used_stock', lazy='dynamic'))
 
     @staticmethod
     def get_all_orders():

@@ -4,14 +4,14 @@ from wtforms.fields import StringField, PasswordField, \
     IntegerField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from model import Users, Stock
+from model import Users, UsedStock
 
 
 class LoginForm(Form):
-    email       = StringField("Email: ", validators=[DataRequired()])
-    password    = PasswordField("Password: ", validators=[DataRequired()])
+    email = StringField("Email: ", validators=[DataRequired()])
+    password = PasswordField("Password: ", validators=[DataRequired()])
     remember_me = BooleanField("Stay Logged In")
-    submit      = SubmitField("Log In")
+    submit = SubmitField("Log In")
 
 
 class SignupForm(Form):
