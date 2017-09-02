@@ -1,0 +1,35 @@
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <p>
+            Name: {{ used_stock.make.name }} {{ used_stock.model.name }}  &nbsp&nbsp  Year: {{ used_stock.year }}
+            &nbsp&nbsp Transmission: {{ used_stock.transmission }} &nbsp&nbsp   Colour: {{ used_stock.colour }}
+            &nbsp&nbsp  Fuel: {{ used_stock.fuel_type }}
+        </p>
+        <p>
+            Mileage: {{ used_stock.mileage }}  &nbsp&nbsp Engine Size: {{ used_stock.engine_size }}&nbsp&nbsp
+            Seats: {{ used_stock.seats }}
+
+        </p>
+        <p class="text-uppercase">£{{ '%0.2f' | format(used_stock.price | float) }}
+            &nbsp&nbsp  {% if used_stock.sold == false %} For Sale {% else %} Sold {% endif %}</p>
+    </div>
+
+        <div class="panel-body">
+            <div class="col-md-5">
+                <img src="{{ url_for('static', filename='img/stock/' + used_stock.image_location)}}" class="img-responsive"/>
+            </div>
+            <div class="col-md-7">
+                {{ used_stock.description }}
+            </div>
+        </div>
+
+    <div class="panel-footer">
+        <button class="btn btn-primary {{ 'disabled' if used_stock.sold }}">
+            <i class="fa fa-phone" aria-hidden="true"></i> Enquire
+        </button>
+        <button class="btn btn-primary pull-right {{ 'disabled' if used_stock.sold }}"
+                onclick="window.location.href='{{ url_for('buy_car', stock_id=used_stock.id) }}'">
+            <i class="fa fa-gbp" aria-hidden="true"></i> Buy Online
+        </button>
+    </div>
+</div>

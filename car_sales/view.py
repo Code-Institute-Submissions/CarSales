@@ -1,9 +1,10 @@
 from flask import render_template, flash, redirect, url_for, request, abort, jsonify
-from form import LoginForm, SignupForm, EditUser
+from form import LoginForm, SignupForm, EditUser, SearchForm
 from car_sales import app, login_manager, db
 from flask_login import login_required, login_user, logout_user, current_user
-from model import Users, CarSale, UsedStock
+from model import Users, CarSale, UsedStock, Makes, Models
 from datetime import datetime
+from sqlalchemy import or_
 
 
 @login_manager.user_loader
@@ -12,10 +13,21 @@ def load_user(userid):
 
 
 @app.route("/")
-@app.route("/home")
+@app.route("/home", methods=['GET', 'POST'])
 @login_required
 def home():
-    return render_template('index.html')
+    form = SearchForm()
+    used_stock = UsedStock.feature_home_page_stock_item()
+    if request.method == 'POST':
+        make = form.data.get('make')
+        model = form.data.get('model')
+        if make is not None and model is not None:
+            queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+
+            flash("Invalid Search Parameter")
+            return render_template("stock/all_used_stock.html", queried_stock=queried_stock)
+
+    return render_template('index.html', used_stock=used_stock, form=form)
 
 
 @app.route("/user/signup", methods=["GET", "POST"])
@@ -88,12 +100,39 @@ def disable_user(user_id):
     return render_template("admin/user_table.html", users=users)
 
 
+@app.route('/stock/buy_car/<int:stock_id>', methods=['GET', 'POST'])
+@login_required
+def buy_car(stock_id):
+    sale = CarSale(order_date=datetime.now(), used_stock_id=stock_id)
+    used_stock = UsedStock.query.filter_by(id=stock_id).first_or_404()
+    used_stock.sold = True
+    db.session.add(sale)
+    db.session.commit()
+
+    return redirect(url_for('home'))
+
+
 @app.route("/stock/used_stock")
 @login_required
 def show_all_used_stock():
-    all_used_stock = UsedStock.get_all_used_stock();
+    queried_stock = UsedStock.get_all_used_stock()
+    return render_template("stock/all_used_stock.html", queried_stock=queried_stock)
 
-    return render_template("stock/all_used_stock.html", all_used_stock=all_used_stock)
+
+@app.route('/stock/return_models/<int:make_id>', methods=['GET'])
+def return_models(make_id):
+
+    if make_id is not None:
+        make = Makes.query.filter_by(id=make_id).first()
+        models = [(row.id, row.name) for row in Models.query.filter_by(make=make).all()]
+        return jsonify(models)
+    return redirect(url_for('home'))
+
+
+@app.route('/stock/search_results', methods=['GET', 'POST'])
+def search_stock():
+
+    return render_template('stock/all_used_stock.html')
 
 
 @app.errorhandler(404)

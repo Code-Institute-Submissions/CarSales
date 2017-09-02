@@ -2,9 +2,11 @@ from flask_wtf import Form
 from wtforms.fields import StringField, PasswordField, \
     BooleanField, SubmitField, \
     IntegerField
+from wtforms.ext.sqlalchemy.fields import QuerySelectField
+from wtforms.fields.html5 import DateField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from model import Users, UsedStock
+from model import Users, UsedStock, Makes
 
 
 class LoginForm(Form):
@@ -37,3 +39,8 @@ class EditUser(Form):
     email      = StringField('Email', validators=[DataRequired(), Length(1, 120), Email()])
     is_active = BooleanField("Active User")
     submit = SubmitField("Edit User")
+
+
+class SearchForm(Form):
+    make = QuerySelectField(query_factory=lambda: Makes.query.order_by("name").all(), get_label="name", default="Any")
+    model = QuerySelectField(query_factory=lambda: UsedStock.query.all(), get_label="model")

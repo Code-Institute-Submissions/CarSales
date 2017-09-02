@@ -1,0 +1,15 @@
+{% from "form_macros.html" import render_field %}
+
+<div class="well">
+    <h3>
+        Search
+    </h3>
+    <form action="" method="post">
+        {{ form.hidden_tag() }}
+        {{ render_field(form.make, class='form-control', type='select', id='make') }}
+        {{ render_field(form.model, class='form-control', type='select', id='model') }}
+        <button class="btn btn-primary" onclick="window.location.href='{{ url_for('search_stock') }}'" id="search_button">
+            Search
+        </button>
+    </form>
+</div>

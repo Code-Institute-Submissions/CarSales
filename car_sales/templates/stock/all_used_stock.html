@@ -1,8 +1,7 @@
 {% extends"base.html" %}
-{% from "form_macros.html" import render_field %}
 
 {% block title %}
-Catalog
+View Stock
 {% endblock %}
 
 {%block jumbotron %}
@@ -15,40 +14,8 @@ Catalog
 <div class="row">
     <div class="container">
         <div class="col-sm-9">
-            {% for used_stock in all_used_stock %}
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <p>
-                            Name: {{ used_stock.make }} {{used_stock.model }}  &nbsp&nbsp  Year: {{ used_stock.year }}
-                            &nbsp&nbsp Transmission: {{ used_stock.transmission }} &nbsp&nbsp   Colour: {{ used_stock.colour }}
-                            &nbsp&nbsp  Fuel: {{ used_stock.fuel_type }}  &nbsp&nbsp  Seats: {{ used_stock.seats }}
-                        </p>
-                        <p>
-                            Mileage: {{ used_stock.mileage }}  &nbsp&nbsp Engine Size: {{ used_stock.engine_size }}
-
-                        </p>
-                        <p class="text-uppercase">£{{ '%0.2f' | format(used_stock.price | float) }}
-                            &nbsp&nbsp  {% if used_stock.sold == false %} For Sale {% else %} Sold {% endif %}</p>
-                    </div>
-
-                        <div class="panel-body">
-                            <div class="col-md-5">
-                                <img src="{{ url_for('static', filename='img/stock/' + used_stock.image_location)}}" class="img-responsive"/>
-                            </div>
-                            <div class="col-md-7">
-                                {{ used_stock.description }}
-                            </div>
-                        </div>
-
-                    <div class="panel-footer">
-                        <button class="btn btn-primary">
-                            <i class="fa fa-phone" aria-hidden="true"></i> Enquire
-                        </button>
-                        <button class="btn btn-primary pull-right">
-                            <i aria-hidden="true" class="fa fa-car"></i> Book Test Drive
-                        </button>
-                    </div>
-                </div>
+            {% for used_stock in queried_stock %}
+                {% include 'shared/stock_item.html' %}
             {% endfor %}
         </div>
         <div class="col-md-3">

@@ -2,14 +2,35 @@ from car_sales import db
 from flask_login import UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+from sqlalchemy.sql.expression import func, select
+from sqlalchemy.orm import load_only
+
+
+class Makes(db.Model):
+    __tablename__ = "makes"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+
+
+class Models(db.Model):
+    __tablename__ = "models"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    make = db.relationship('Makes', lazy='joined',
+                           backref=db.backref('makes', lazy='dynamic'))
+    make_id = db.Column(db.Integer, db.ForeignKey("makes.id"))
 
 
 class UsedStock(db.Model):
     __tablename__ = 'used_stock'
     __table_args__ = {'extend_existing': 'True'}
     id = db.Column(db.Integer, primary_key=True)
-    make = db.Column(db.String(50), nullable=False)
-    model = db.Column(db.String(100), nullable=False)
+    make = db.relationship('Makes', lazy='joined',
+                            backref=db.backref('make_name', lazy='dynamic'))
+    make_id = db.Column(db.Integer, db.ForeignKey("makes.id"))
+    model = db.relationship('Models', lazy='joined',
+                           backref=db.backref('models', lazy='dynamic'))
+    model_id = db.Column(db.Integer, db.ForeignKey("models.id"))
     mileage = db.Column(db.String(10), nullable=True)
     year = db.Column(db.Integer, nullable=True)
     fuel_type = db.Column(db.String(10), nullable=True)
@@ -29,6 +50,13 @@ class UsedStock(db.Model):
     @staticmethod
     def get_used_stock_by_id(stock_id):
         return UsedStock.query.filter_by(id=stock_id).first_or_404()
+
+    @staticmethod
+    def feature_home_page_stock_item():
+        return UsedStock.query.filter_by(sold=False).order_by(func.random()).first()
+
+    def __str__(self):
+        return self.make
 
 
 class Users (db.Model, UserMixin):
