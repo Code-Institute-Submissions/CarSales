@@ -4,7 +4,7 @@ from car_sales import app, login_manager, db
 from flask_login import login_required, login_user, logout_user, current_user
 from model import Users, CarSale, UsedStock, Makes, Models
 from datetime import datetime
-from sqlalchemy import or_
+import json
 
 
 @login_manager.user_loader
@@ -26,7 +26,7 @@ def home():
 
             flash("Invalid Search Parameter")
             return render_template("stock/all_used_stock.html", queried_stock=queried_stock)
-
+        return render_template("stock/all_used_stock.html", queried_stock=[])
     return render_template('index.html', used_stock=used_stock, form=form)
 
 
@@ -100,6 +100,11 @@ def disable_user(user_id):
     return render_template("admin/user_table.html", users=users)
 
 
+@app.route('/contact_us')
+def contact_us():
+    return render_template('admin/contact_us.html')
+
+
 @app.route('/stock/buy_car/<int:stock_id>', methods=['GET', 'POST'])
 @login_required
 def buy_car(stock_id):
@@ -121,7 +126,6 @@ def show_all_used_stock():
 
 @app.route('/stock/return_models/<int:make_id>', methods=['GET'])
 def return_models(make_id):
-
     if make_id is not None:
         make = Makes.query.filter_by(id=make_id).first()
         models = [(row.id, row.name) for row in Models.query.filter_by(make=make).all()]
@@ -131,8 +135,19 @@ def return_models(make_id):
 
 @app.route('/stock/search_results', methods=['GET', 'POST'])
 def search_stock():
-
     return render_template('stock/all_used_stock.html')
+
+
+@app.route('/stock/sales_history', methods=['GET'])
+def sales_history():
+    sales = CarSale.get_all_orders()
+    return render_template('stock/sales_history.html', sales=sales)
+
+
+@app.route('/stock/reporting_bar_chart', methods=['GET', 'POST'])
+def prepare_chart():
+    sales = CarSale.get_all_orders()
+    return jsonify(list([i.serialize for i in sales]))
 
 
 @app.errorhandler(404)

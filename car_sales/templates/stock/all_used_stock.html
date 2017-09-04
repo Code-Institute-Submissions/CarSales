@@ -14,6 +14,7 @@ View Stock
 <div class="row">
     <div class="container">
         <div class="col-sm-9">
+            <p>We currently have <span style="color: #e95420">{{ queried_stock | length }}</span> cars in stock that match your search criteria</p>
             {% for used_stock in queried_stock %}
                 {% include 'shared/stock_item.html' %}
             {% endfor %}
@@ -21,6 +22,7 @@ View Stock
         <div class="col-md-3">
 
         </div>
+
     </div>
 </div>
 {% endblock %}

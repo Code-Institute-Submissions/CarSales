@@ -3,7 +3,6 @@ from flask_login import UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from sqlalchemy.sql.expression import func, select
-from sqlalchemy.orm import load_only
 
 
 class Makes(db.Model):
@@ -108,3 +107,21 @@ class CarSale(db.Model):
     @staticmethod
     def get_all_orders():
         return CarSale.query.all()
+
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'order_date': self.order_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'used_stock_id': self.used_stock_id,
+            'make': self.used_stock.make.name,
+            'model': self.used_stock.model.name,
+            'year': self.used_stock.year,
+            'fuel_type': self.used_stock.fuel_type,
+            'engine_size': self.used_stock.engine_size,
+            'seats': self.used_stock.seats,
+            'colour': self.used_stock.colour,
+            'transmission': self.used_stock.transmission,
+            'price': str(self.used_stock.price),
+            'mileage': self.used_stock.mileage
+        }

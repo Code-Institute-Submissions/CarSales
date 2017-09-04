@@ -8,8 +8,6 @@
         {{ form.hidden_tag() }}
         {{ render_field(form.make, class='form-control', type='select', id='make') }}
         {{ render_field(form.model, class='form-control', type='select', id='model') }}
-        <button class="btn btn-primary" onclick="window.location.href='{{ url_for('search_stock') }}'" id="search_button">
-            Search
-        </button>
+        {{ render_field(form.submit, class='btn btn-primary', type='submit', id='search-button') }}
     </form>
 </div>

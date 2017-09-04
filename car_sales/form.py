@@ -6,7 +6,7 @@ from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import DateField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from model import Users, UsedStock, Makes
+from model import Users, UsedStock, Makes, Models
 
 
 class LoginForm(Form):
@@ -43,4 +43,5 @@ class EditUser(Form):
 
 class SearchForm(Form):
     make = QuerySelectField(query_factory=lambda: Makes.query.order_by("name").all(), get_label="name", default="Any")
-    model = QuerySelectField(query_factory=lambda: UsedStock.query.all(), get_label="model")
+    model = QuerySelectField(query_factory=lambda: Models.query.all(), get_label="name")
+    submit = SubmitField("Search Stock")

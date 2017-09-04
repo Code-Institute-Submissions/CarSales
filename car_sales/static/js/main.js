@@ -19,7 +19,7 @@ $(document).ready(
             dropdown.model.empty();
             if(onPageLoad === false){
             $.ajax({
-                url:'/stock/return_models/'+send.make,
+                 url:'/stock/return_models/'+send.make,
                  success: function(data) {
                     data.forEach(function(item) {
                         dropdown.model.append(

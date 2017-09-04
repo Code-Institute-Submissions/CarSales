@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="container">
+        <div class="col-md-6" id="sales_line_chart" ></div>
+        <div class="col-md-6" id="sales_pie_chart"></div>
+    </div>
+</div>
+<div class="row">
+    <div class="container">
+        <h1 class="text-center">
+            Order History
+        </h1>
+        {% if sales != null %}
+            <table class="table table-stripped" id="dc-data-table">
+                <thead>
+                    <th>Order Date</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Price</th>
+                    <th>Engine Size</th>
+                    <th>Seats</th>
+                    <th>Colour</th>
+                    <th>Fuel Type</th>
+                    <th>Mileage</th>
+                </thead>
+                <tbody>
+                <!--{% for sale in sales %}-->
+                    <!--<tr>-->
+                        <!--<td>{{ sale.order_date.strftime('%d-%m-%Y') }}</td>-->
+                        <!--<td>{{ sale.used_stock.make.name}}</td>-->
+                        <!--<td>{{ sale.used_stock.model.name }}</td>-->
+                        <!--<td>{{ sale.used_stock.year }}</td>-->
+                        <!--<td>{{ '%0.2f' | format(sale.used_stock.price | float) }}</td>-->
+                        <!--<td>{{ sale.used_stock.engine_size }}</td>-->
+                        <!--<td>{{ sale.used_stock.seats }}</td>-->
+                        <!--<td>{{ sale.used_stock.colour }}</td>-->
+                        <!--<td>{{ sale.used_stock.fuel_type }}</td>-->
+                        <!--<td>{{ sale.used_stock.mileage }}</td>-->
+                    <!--</tr>-->
+                <!--{% endfor %}-->
+                </tbody>
+            </table>
+        {% else %}
+            <p>
+                No Previous Orders
+            </p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/basic_chart.js') }}"></script>
+{% endblock %}
