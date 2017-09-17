@@ -29,11 +29,17 @@ Users
             <td>{{ user.last_name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.is_active }}</td>
-            <td colspan="2">
-                <button type=button" class="btn btn-sm btn-primary"
-                        onclick="window.location.href='{{ url_for('edit_user', user_id=user.id) }}'">Edit</button>
-                <button type="button" class="btn btn-sm btn-primary {{ 'disabled' if not user.is_active }}"
-                        onclick="window.location.href='{{ url_for('disable_user', user_id=user.id) }}'">Disable</button>
+            <td>
+                <a type=button"  data-toggle="tooltip" title="Edit User"
+                        href="{{ url_for('edit_user', user_id=user.id) }}">
+                    <span class="fa fa-pencil fa-2x"></span>
+                </a>
+            </td>
+            <td>
+                <a type="button" class="{{ 'disabled' if not user.is_active }}" data-toggle="tooltip" title="Disable User"
+                        href="{{ url_for('disable_user', user_id=user.id) }}">
+                    <span class="fa fa-ban fa-2x"></span>
+                </a>
             </td>
         </tr>
     {% endfor %}

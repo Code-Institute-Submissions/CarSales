@@ -2,9 +2,12 @@ from flask import render_template, flash, redirect, url_for, request, abort, jso
 from form import LoginForm, SignupForm, EditUser, SearchForm
 from car_sales import app, login_manager, db
 from flask_login import login_required, login_user, logout_user, current_user
-from model import Users, CarSale, UsedStock, Makes, Models
+from model import Users, CarSale, UsedStock, Makes, Models, Pagination
 from datetime import datetime
 import json
+from flask_paginate import Pagination, get_page_parameter
+
+per_page = 5
 
 
 @login_manager.user_loader
@@ -14,19 +17,34 @@ def load_user(userid):
 
 @app.route("/")
 @app.route("/home", methods=['GET', 'POST'])
-@login_required
 def home():
     form = SearchForm()
     used_stock = UsedStock.feature_home_page_stock_item()
+    search = False
+
     if request.method == 'POST':
+        q = request.args.get('q')
+        if q:
+            search = True
+
         make = form.data.get('make')
         model = form.data.get('model')
         if make is not None and model is not None:
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+            offset = page * per_page
+
             queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+            all_stock = UsedStock.query.limit(per_page).offset(offset)
+
+            pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock), search=search,
+                                    record_name='used_stock', css_framework='bootstrap3')
 
             flash("Invalid Search Parameter")
-            return render_template("stock/all_used_stock.html", queried_stock=queried_stock)
-        return render_template("stock/all_used_stock.html", queried_stock=[])
+            return render_template("stock/all_used_stock.html",
+                                   queried_stock=queried_stock,
+                                   form=form,
+                                   pagination=pagination)
+
     return render_template('index.html', used_stock=used_stock, form=form)
 
 
@@ -117,11 +135,45 @@ def buy_car(stock_id):
     return redirect(url_for('home'))
 
 
-@app.route("/stock/used_stock")
-@login_required
+@app.route("/stock/used_stock",  methods=['GET', 'POST'])
 def show_all_used_stock():
+    form = SearchForm()
     queried_stock = UsedStock.get_all_used_stock()
-    return render_template("stock/all_used_stock.html", queried_stock=queried_stock)
+    search = False
+
+    if request.method == 'POST':
+        q = request.args.get('q')
+        if q:
+            search = True
+
+        make = form.data.get('make')
+        model = form.data.get('model')
+        if make is not None and model is not None:
+            page = request.args.get(get_page_parameter(), type=int, default=1)
+            offset = page * per_page
+
+            queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+
+            pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock), search=search,
+                                    record_name='used_stock', css_framework='bootstrap3')
+
+            flash("Invalid Search Parameter")
+            return render_template("stock/all_used_stock.html",
+                                   queried_stock=queried_stock,
+                                   form=form,
+                                   pagination=pagination)
+
+    page = request.args.get(get_page_parameter(), type=int, default=1)
+    offset = page * per_page
+
+    pagination_results = UsedStock.query.limit(per_page).offset(offset)
+    pagination = Pagination(page=page, total=len(queried_stock), search=search,
+                            record_name='Used Stock', per_page=per_page, css_framework='bootstrap3')
+
+    return render_template("stock/all_used_stock.html",
+                           queried_stock=pagination_results,
+                           form=form,
+                           pagination=pagination)
 
 
 @app.route('/stock/return_models/<int:make_id>', methods=['GET'])
@@ -145,6 +197,7 @@ def sales_history():
 
 
 @app.route('/stock/reporting_bar_chart', methods=['GET', 'POST'])
+@login_required
 def prepare_chart():
     sales = CarSale.get_all_orders()
     return jsonify(list([i.serialize for i in sales]))
