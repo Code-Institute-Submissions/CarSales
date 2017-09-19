@@ -111,7 +111,7 @@ function preparePieChart(dimension, group, chartId){
     var makesRowChart = dc.pieChart(chartId);
 
     makesRowChart
-        //.ordinalColors(["#ED0600", "#ED6700", "#ED9E00", "#D3D1C5", "#F5821F"])
+        .linearColors(["#4575b4", "#ffffbf"])
         .width(300)
 		.height(300)
         .radius(100)
@@ -125,7 +125,7 @@ function prepareRowChart(dimension, group, chartId){
     var salesRowChart = dc.rowChart(chartId);
 
     salesRowChart
-        //.ordinalColors(["#79CED7", "#66AFB2", "#C96A23", "#D3D1C5", "#F5821F"])
+        .linearColors(["#4575b4", "#ffffbf"])
         .width(540)
 		.height(405)
 		.dimension(dimension)
@@ -139,7 +139,10 @@ function prepareDataTable(dimension){
         .dimension(dimension)
         .group(function (d) {
             return monthNames[d.month];
-        })// create the columns dynamically
+        })
+        .order(function (d) {
+            return d3.descending(d.month);
+        })
         .columns([function (d) {
             return d.order_date.getDate() + "/" + (d.order_date.getMonth() + 1) + "/" + d.order_date.getFullYear();
         },

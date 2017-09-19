@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 # Configure Database
 app.config['SECRET_KEY'] = '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Yamaha5034Rider@localhost:3306/car_sales'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Imperfect123Cloistered@localhost:3306/car_sales'
 app.config['Debug'] = True
 db = SQLAlchemy(app)
 
