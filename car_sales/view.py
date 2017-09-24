@@ -22,7 +22,7 @@ def load_user(userid):
 
 
 @app.route("/")
-@app.route("/home", methods=['GET', 'POST'])
+@app.route("/home/", methods=['GET', 'POST'])
 def home():
     form = SearchForm()
     used_stock = UsedStock.feature_home_page_stock_item()
@@ -51,7 +51,7 @@ def home():
     return render_template('index.html', used_stock=used_stock, form=form)
 
 
-@app.route("/stock/add_stock", methods=["GET", "POST"])
+@app.route("/stock/add_stock/", methods=["GET", "POST"])
 @login_required
 def add_stock():
     form = AddStock()
@@ -87,7 +87,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-@app.route("/user/signup", methods=["GET", "POST"])
+@app.route("/user/signup/", methods=["GET", "POST"])
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
@@ -102,7 +102,7 @@ def signup():
     return render_template("account/signup.html", form=form)
 
 
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login/", methods=["GET", "POST"])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -116,14 +116,14 @@ def login():
     return render_template("account/login.html", form=form)
 
 
-@app.route("/logout")
+@app.route("/logout/")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('home'))
 
 
-@app.route("/admin/users/edit/<int:user_id>", methods=["Get", "POST"])
+@app.route("/admin/users/edit/<int:user_id>/", methods=["Get", "POST"])
 @login_required
 def edit_user(user_id):
     user = Users.get_user(user_id)
@@ -139,14 +139,14 @@ def edit_user(user_id):
     return render_template("admin/edit_user.html", user=user, form=form)
 
 
-@app.route("/admin/users")
+@app.route("/admin/users/")
 @login_required
 def user_table():
     users = Users.get_all_users()
     return render_template("admin/user_table.html", users=users)
 
 
-@app.route("/admin/user/disable/<int:user_id>", methods=["Get"])
+@app.route("/admin/user/disable/<int:user_id>/", methods=["Get"])
 @login_required
 def disable_user(user_id):
     user = Users.get_user(user_id)
@@ -157,7 +157,7 @@ def disable_user(user_id):
     return render_template("admin/user_table.html", users=users)
 
 
-@app.route('/contact_us')
+@app.route('/contact_us/')
 def contact_us():
     return render_template('admin/contact_us.html')
 
@@ -173,7 +173,7 @@ def buy_car(stock_id):
     return redirect(url_for('home'))
 
 
-@app.route("/stock/used_stock",  methods=['GET', 'POST'])
+@app.route("/stock/used_stock/",  methods=['GET', 'POST'])
 def show_all_used_stock():
     form = SearchForm()
     queried_stock = UsedStock.get_all_used_stock()
@@ -213,7 +213,7 @@ def show_all_used_stock():
                            pagination=pagination)
 
 
-@app.route('/stock/return_models/<int:make_id>', methods=['GET'])
+@app.route('/stock/return_models/<int:make_id>/', methods=['GET'])
 def return_models(make_id):
     if make_id is not None:
         make = Makes.query.filter_by(id=make_id).first()
@@ -222,18 +222,18 @@ def return_models(make_id):
     return redirect(url_for('home'))
 
 
-@app.route('/stock/search_results', methods=['GET', 'POST'])
+@app.route('/stock/search_results/', methods=['GET', 'POST'])
 def search_stock():
     return render_template('stock/all_used_stock.html')
 
 
-@app.route('/stock/sales_history', methods=['GET'])
+@app.route('/stock/sales_history/', methods=['GET'])
 def sales_history():
     sales = CarSale.get_all_orders()
     return render_template('stock/sales_history.html', sales=sales)
 
 
-@app.route('/stock/reporting_bar_chart', methods=['GET', 'POST'])
+@app.route('/stock/reporting_bar_chart/', methods=['GET', 'POST'])
 @login_required
 def prepare_chart():
     sales = CarSale.get_all_orders()
