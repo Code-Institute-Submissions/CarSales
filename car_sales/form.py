@@ -1,7 +1,8 @@
 from flask_wtf import Form
 from wtforms.fields import StringField, PasswordField, \
     BooleanField, SubmitField, \
-    IntegerField
+    IntegerField, FloatField
+from flask_wtf.file import FileField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from wtforms.fields.html5 import DateField
 
@@ -43,5 +44,22 @@ class EditUser(Form):
 
 class SearchForm(Form):
     make = QuerySelectField(query_factory=lambda: Makes.query.order_by("name").all(), get_label="name", default="Any")
-    model = QuerySelectField(query_factory=lambda: Models.query.all(), get_label="name")
+    model = QuerySelectField(query_factory=lambda: Models.query.order_by("name").all(), get_label="name")
     submit = SubmitField("Search Stock")
+
+
+class AddStock(Form):
+    make = QuerySelectField(query_factory=lambda: Makes.query.order_by("name").all(), get_label="name", default="Any")
+    model = QuerySelectField(query_factory=lambda: Models.query.order_by("name").all(), get_label="name")
+    year = StringField("Year", validators=[Length(1, 20)])
+    fuel_type = StringField("Fuel Type", validators=[Length(1, 20)])
+    engine_size = StringField("Engine Size", validators=[Length(1, 20)])
+    seats = IntegerField("Seats")
+    colour = StringField("Colour", validators=[Length(1, 20)])
+    transmission = StringField("Transmission", validators=[Length(1, 20)])
+    mileage = StringField("Mileage", validators=[Length(1, 20)])
+    image_location = FileField()
+    price = FloatField("Price", default=0.0)
+    description = StringField("Description", validators=[DataRequired(), Length(1, 3000)])
+    sold = BooleanField("Sold")
+    submit = SubmitField("Add Stock")

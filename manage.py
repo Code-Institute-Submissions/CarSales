@@ -5,6 +5,7 @@ from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 import car_makes as makes
 import car_models as models
+import used_stock as cars
 
 manager = Manager(app)
 migrate = Migrate(app, db)
@@ -14,14 +15,16 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def insert_data():
-    user = Users(first_name="James", last_name="Horan", email="horan5034@gmail.com", password="P@ssw0rd", is_active=True)
+    #user = Users(first_name="James", last_name="Horan", email="horan5034@gmail.com", password="P@ssw0rd", is_active=True)
 
-    db.session.add(user)
+    #db.session.add(user)
 
+    for car in cars.cars:
+        db.session.add(car)
     # for make in makes.makes:
     #     db.session.add(make)
-    for model in models.models:
-        db.session.add(model)
+    # for model in models.models:
+    #     db.session.add(model)
     # for car in cars:
     #     db.session.add(car)
     db.session.commit()

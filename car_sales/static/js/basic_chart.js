@@ -4,7 +4,7 @@ $.ajax({
     success: function(data) {
         console.log(data);
 
-        prepareChart(data);
+        prepareCharts(data);
     },
     failure: function(response){
        console.log("Failure");
@@ -15,9 +15,7 @@ var monthNames = ["January", "February", "March", "April", "May", "June",
   "July", "August", "September", "October", "November", "December"
 ];
 
-function prepareChart(salesData){
-    var salesLineChart = dc.lineChart('#sales_line_chart');
-    var salesPieChart = dc.pieChart('#sales_pie_chart');
+function prepareCharts(salesData){
 
     var ndx = crossfilter(salesData);
     var parseDate = d3.time.format("%Y-%m-%dT%H:%M:%S").parse;
@@ -39,97 +37,128 @@ function prepareChart(salesData){
     });
 
     var dateDimension = ndx.dimension(function(d){
-        return d.order_date.getDate();
+        return d.order_date;
     });
 
-    var carYearDimension = dateDimension.group().reduceSum(function(d){
-        return d.year;
+     var dateDimensionTwo = ndx.dimension(function(d){
+        return d.order_date;
     });
 
-    var makeDimension = dateDimension.group().reduceSum(function(d){
+    var makeDimension = ndx.dimension(function(d){
+        return d.make;
+    });
+    var makeDimensionTwo = ndx.dimension(function(d){
         return d.make;
     });
 
-    var modelDimension = dateDimension.group().reduceSum(function(d){
+    var modelDimension = ndx.dimension(function(d){
         return d.model;
     });
 
-    var colourDimension = dateDimension.group().reduceSum(function(d){
-        return d.colour;
+    var modelDimensionTwo = ndx.dimension(function(d){
+        return d.model;
     });
 
-    var priceDimension = dateDimension.group().reduceSum(function(d){
-        return +d.price;
-    })
+    // Calculations
+    var makeGroup = makeDimension.group();
+    var makeGroupTwo = makeDimensionTwo.group()
+    var modelGroup = modelDimension.group();
+    var modelGroupTwo = modelDimension.group();
+
+    var modelGroupThree = modelDimension.group();
 
     var minDate = dateDimension.bottom(1)[0].order_date;
     var maxDate = dateDimension.top(1)[0].order_date;
 
-    console.log(makeDimension);
+    prepareRowChart(modelDimension, modelGroup, '#sales_row_chart');
+    preparePieChart(makeDimensionTwo, makeGroup, '#makes_pie_chart');
+    preparePieChart(modelDimensionTwo, modelGroupTwo, '#models_pie_chart');
 
-    salesLineChart.width(540)
-					 .height(405)
-					 .dimension(dateDimension)
-					 .group(carYearDimension, "Year")
-					 .stack(makeDimension, "Make")
-					 .renderArea(true)
-					 .brushOn(false)
-					 .x(d3.time.scale().domain([minDate, maxDate]).nice())
-					 .legend(dc.legend().x(450).y(10).itemHeight(13).gap(5))
-					 .yAxisLabel("Sold Per Month")
-					 .xAxis();
+    prepareDataTable(dateDimension);
 
+    dc.renderAll();
+};
 
-	var yearDimension = ndx.dimension(function(d){
-	    return +d.order_year;
-	});
+function preparePieChart(dimension, group, chartId){
+    var makesPieChart = dc.pieChart(chartId);
 
-	console.log(yearDimension);
+    makesPieChart
+    .ordinalColors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00', '#a65628'])
+        .width(300)
+		.height(300)
+        .radius(100)
+        .innerRadius(50)
+        .transitionDuration(1500)
+        .dimension(dimension)
+        .group(group);
+};
 
+function prepareRowChart(dimension, group, chartId){
+    var salesRowChart = dc.rowChart(chartId);
 
-    salesPieChart.width(300)
-                .height(300)
-                .slicesCap(5)
-                .innerRadius(100)
-                .dimension(dateDimension)
-                .group(carYearDimension);
+    salesRowChart
+    .ordinalColors(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00', '#a65628'])
+        .width(540)
+		.height(405)
+		.dimension(dimension)
+		.group(group)
+		.xAxis().ticks(6);
+};
 
+function prepareLineChart(dimension, group, stack, minDate, maxDate, chartId){
+    var salesLineChart = dc.lineChart(chartId);
+
+    salesLineChart.width(0)
+                 .height(0)
+                 .dimension(dimension)
+                 .group(group, "makes")
+                 .stack(stack, "models")
+                 .renderArea(true)
+                 .brushOn(false)
+                 .x(d3.time.scale().domain([minDate, maxDate]))
+                 .legend(dc.legend().x(450).y(10).itemHeight(13).gap(5))
+                 .yAxisLabel("Sales Per Day");
+
+};
+
+function prepareDataTable(dimension){
     var datatable = dc.dataTable("#dc-data-table");
-    datatable.dimension(dateDimension)
-            .group(function (d) {
-                return monthNames[d.month];
-            })// create the columns dynamically
-            .columns([function (d) {
-               return d.order_date.getDate() + "/" + (d.order_date.getMonth() + 1) + "/" + d.order_date.getFullYear();
-            },
-            function (d) {
-               return d.make;
-            },
-            function (d) {
-               return d.model;
-            },
-            function (d) {
-               return d.year;
-            },
-            function (d) {
-               return parseFloat(d.price).toFixed(2);
-            },
-            function (d) {
-               return d.engine_size;
-            },
-            function (d) {
-               return d.seats;
-            },
-            function (d) {
-               return d.colour;
-            },
-            function (d) {
-               return d.fuel_type;
-            },
-            function(d){
+    datatable
+        .dimension(dimension)
+        .group(function (d) {
+            return monthNames[d.month];
+        })
+        .order(function (d) {
+            return d3.descending(d.month);
+        })
+        .columns([function (d) {
+            return d.order_date.getDate() + "/" + (d.order_date.getMonth() + 1) + "/" + d.order_date.getFullYear();
+        },
+        function (d) {
+            return d.make;
+        },
+        function (d) {
+            return d.model;
+        },
+        function (d) {
+            return d.year;
+        },
+        function (d) {
+            return parseFloat(d.price).toFixed(2);
+        },
+        function (d) {
+            return d.engine_size;
+        },
+        function (d) {
+            return d.seats;
+        },
+        function (d) {
+            return d.colour;
+        },
+        function (d) {
+            return d.fuel_type;
+        },
+        function(d){
             return d.mileage}
         ]);
-
-    // Now tell dc to render the chart/s
-    dc.renderAll();
 };

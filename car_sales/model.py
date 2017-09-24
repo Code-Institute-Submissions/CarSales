@@ -3,6 +3,7 @@ from flask_login import UserMixin, current_user
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from sqlalchemy.sql.expression import func, select
+from math import ceil
 
 
 class Makes(db.Model):
@@ -52,7 +53,7 @@ class UsedStock(db.Model):
 
     @staticmethod
     def feature_home_page_stock_item():
-        return UsedStock.query.filter_by(sold=False).order_by(func.random()).first()
+        return UsedStock.query.filter_by(sold=False).order_by(func.random()).first_or_404()
 
     def __str__(self):
         return self.make
@@ -125,3 +126,35 @@ class CarSale(db.Model):
             'price': str(self.used_stock.price),
             'mileage': self.used_stock.mileage
         }
+
+
+class Pagination(object):
+
+    def __init__(self, page, per_page, total_count):
+        self.page = page
+        self.per_page = per_page
+        self.total_count = total_count
+
+    @property
+    def pages(self):
+        return int(ceil(self.total_count / float(self.per_page)))
+
+    @property
+    def has_prev(self):
+        return self.page > 1
+
+    @property
+    def has_next(self):
+        return self.page < self.pages
+
+    def iter_pages(self, left_edge=2, left_current=2,
+                   right_current=5, right_edge=2):
+        last = 0
+        for num in xrange(1, self.pages + 1):
+            if num <= left_edge or \
+              (self.page - left_current - 1 < num < self.page + right_current) or \
+               num > self.pages - right_edge:
+                if last + 1 != num:
+                    yield None
+                yield num
+                last = num
