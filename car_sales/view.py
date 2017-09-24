@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from car_sales import app, login_manager, db
+from CarSales import app, login_manager, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_required, login_user, logout_user
 from flask_paginate import Pagination, get_page_parameter
