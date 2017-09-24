@@ -32,7 +32,7 @@ def insert_data():
 def dropdb():
     if prompt_bool("Are you sure you want to lose all your data"):
         db.drop_all()
-        print 'Dropped the database'
+        print ('Dropped the database')
 
 if __name__ == '__main__':
     manager.run()
