@@ -10,7 +10,7 @@ from form import LoginForm, SignupForm, EditUser, SearchForm, AddStock
 from model import Users, CarSale, UsedStock, Makes, Models, Pagination
 
 per_page = 5
-UPLOAD_FOLDER = 'C:\Users\user\OneDrive\Study Materials\Full Stack Diploma\Projects\CarSales\car_sales\static\img\stock'
+UPLOAD_FOLDER = 'static\img\stock'
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -204,8 +204,8 @@ def show_all_used_stock():
     offset = page * per_page
 
     pagination_results = UsedStock.query.limit(per_page).offset(offset).all()
-    pagination = Pagination(page=page, total=len(queried_stock),
-                            record_name='Used Stock', per_page=per_page, css_framework='bootstrap3')
+    pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock), search=search,
+                            record_name='used_stock', css_framework='bootstrap3')
 
     return render_template("stock/all_used_stock.html",
                            queried_stock=pagination_results,
