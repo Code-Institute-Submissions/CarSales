@@ -15,4 +15,3 @@ WTForms==2.1
 flask-paginate
 mysqlclient==1.3.4
 Flask-WTF
-mysql-python
