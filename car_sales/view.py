@@ -204,7 +204,7 @@ def show_all_used_stock():
     offset = page * per_page
 
     pagination_results = UsedStock.query.limit(per_page).offset(offset).all()
-    pagination = Pagination(page=page, total=len(queried_stock), search=search,
+    pagination = Pagination(page=page, total=len(queried_stock),
                             record_name='Used Stock', per_page=per_page, css_framework='bootstrap3')
 
     return render_template("stock/all_used_stock.html",
