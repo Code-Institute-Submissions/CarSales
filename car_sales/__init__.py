@@ -1,8 +1,10 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask.ext.heroku import Heroku
 
 app = Flask(__name__)
+heroku = Heroku(app)
 
 # Configure Database
 app.config['SECRET_KEY'] = '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx'
