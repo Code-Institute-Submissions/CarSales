@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from CarSales import app, login_manager, db
+from car_sales import app, login_manager, db
 from flask import render_template, flash, redirect, url_for, request, jsonify
 from flask_login import login_required, login_user, logout_user
 from flask_paginate import Pagination, get_page_parameter
@@ -250,3 +250,6 @@ def server_error(e):
     return render_template('errors/500.html'), 500
 
 
+
+if __name__ == '__main__':
+    app.run(debug=True)
