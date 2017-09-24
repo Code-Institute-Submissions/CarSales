@@ -1,12 +1,13 @@
-from flask import render_template, flash, redirect, url_for, request, abort, jsonify
-from form import LoginForm, SignupForm, EditUser, SearchForm, AddStock
-from car_sales import app, login_manager, db
-from flask_login import login_required, login_user, logout_user, current_user
-from model import Users, CarSale, UsedStock, Makes, Models, Pagination
 from datetime import datetime
-import json
+
+from car_sales import app, login_manager, db
+from flask import render_template, flash, redirect, url_for, request, jsonify
+from flask_login import login_required, login_user, logout_user
 from flask_paginate import Pagination, get_page_parameter
 from werkzeug import secure_filename
+
+from form import LoginForm, SignupForm, EditUser, SearchForm, AddStock
+from model import Users, CarSale, UsedStock, Makes, Models, Pagination
 
 per_page = 5
 UPLOAD_FOLDER = 'C:\Users\user\OneDrive\Study Materials\Full Stack Diploma\Projects\CarSales\car_sales\static\img\stock'

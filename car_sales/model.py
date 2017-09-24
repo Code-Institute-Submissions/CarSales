@@ -1,9 +1,10 @@
-from car_sales import db
-from flask_login import UserMixin, current_user
-from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-from sqlalchemy.sql.expression import func, select
 from math import ceil
+
+from car_sales import db
+from flask_login import UserMixin
+from sqlalchemy.sql.expression import func
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 class Makes(db.Model):
