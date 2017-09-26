@@ -1,1 +1,1 @@
-web: gunicorn car_sales.wsgi:application
+web: gunicorn car_sales.view:application
