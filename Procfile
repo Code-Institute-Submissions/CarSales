@@ -1,1 +1,1 @@
-web: gunicorn car_sales/view.py:app
+web: gunicorn car_sales:app
