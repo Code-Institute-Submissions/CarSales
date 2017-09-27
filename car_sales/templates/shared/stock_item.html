@@ -28,7 +28,7 @@
             <i class="fa fa-phone" aria-hidden="true"></i> Enquire
         </button>
         <button class="btn btn-primary pull-right {{ 'disabled' if used_stock.sold }}"
-                onclick="window.location.href='{{ url_for('buy_car', stock_id=used_stock.id) }}'">
+                onclick="window.location.href='{{ url_for('root.buy_car', stock_id=used_stock.id) }}'">
             <i class="fa fa-gbp" aria-hidden="true"></i> Buy Online
         </button>
     </div>

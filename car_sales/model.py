@@ -1,10 +1,12 @@
 from datetime import datetime
 from math import ceil
 
-from car_sales import db
 from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 from werkzeug.security import check_password_hash, generate_password_hash
+
+db = SQLAlchemy()
 
 
 class Makes(db.Model):
@@ -129,7 +131,7 @@ class CarSale(db.Model):
         }
 
 
-class Pagination(object):
+class PaginationObject(object):
 
     def __init__(self, page, per_page, total_count):
         self.page = page

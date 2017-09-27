@@ -21,7 +21,7 @@ Login
             {{ render_field(form.remember_me, class='form-check', type='radio') }}
             {{ render_field(form.submit, class='btn btn-primary') }}
         </form>
-        <p class="text-center">Don't have an account. Why not <a href="{{ url_for('signup') }}">Sign Up</a></p>
+        <p class="text-center">Don't have an account. Why not <a href="{{ url_for('root.signup') }}">Sign Up</a></p>
     </div>
 {% endblock %}
 
