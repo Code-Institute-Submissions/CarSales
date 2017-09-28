@@ -9,9 +9,15 @@ from car_sales.view import root
 heroku = Heroku()
 
 
-def create_app(config):
+def create_app():
     app_ = Flask(__name__)
-    app_.config.update(config)
+
+    db_url = os.environ.get("CLEARDB_DATABASE_URL", "mysql://root:Imperfect123Cloistered@localhost:3306/car_sales")
+    app_.config.update({
+        'SECRET_KEY': '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx',
+        'SQLALCHEMY_DATABASE_URI': db_url,
+        'UPLOAD_FOLDER': 'static\img\stock',
+        'DEBUG': True})
 
     db.init_app(app_)
     heroku.init_app(app_)
@@ -31,12 +37,5 @@ def create_app(config):
 
 
 if __name__ == '__main__':
-    db_url = os.environ.get("CLEARDB_DATABASE_URL", "mysql://root:Imperfect123Cloistered@localhost:3306/car_sales")
-    config = {
-        'SECRET_KEY': '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx',
-        'SQLALCHEMY_DATABASE_URI': db_url,
-        'UPLOAD_FOLDER': 'static\img\stock',
-        'DEBUG': True}
-
-    app = create_app(config)
+    app = create_app()
     app.run()

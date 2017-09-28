@@ -1,1 +1,1 @@
-web: gunicorn car_sales:app
+web: gunicorn car_sales:create_app()
