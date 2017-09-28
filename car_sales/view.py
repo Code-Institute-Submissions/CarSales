@@ -74,7 +74,7 @@ def add_stock():
 
         db.session.add(stock)
         db.session.commit()
-        return redirect(url_for('.home'))
+        return redirect(url_for('root.home'))
     return render_template("stock/add_stock.html", form=form)
 
 
@@ -94,7 +94,7 @@ def signup():
                      is_active=True)
         db.session.add(user)
         db.session.commit()
-        return redirect(url_for('.home'))
+        return redirect(url_for('root.home'))
     return render_template("account/signup.html", form=form)
 
 
@@ -107,7 +107,7 @@ def login():
         if user is not None and user.check_password(form.password.data):
             login_user(user, form.remember_me.data)
 
-            return redirect(request.args.get('next') or url_for('.home'))
+            return redirect(request.args.get('next') or url_for('root.home'))
         flash("Invalid Username or Password!")
     return render_template("account/login.html", form=form)
 
@@ -131,7 +131,7 @@ def edit_user(user_id):
             user.is_active = True
 
         db.session.commit()
-        return redirect(url_for('.user_table'))
+        return redirect(url_for('root.user_table'))
     return render_template("admin/edit_user.html", user=user, form=form)
 
 
@@ -166,7 +166,7 @@ def buy_car(stock_id):
     db.session.add(sale)
     db.session.commit()
 
-    return redirect(url_for('.home'))
+    return redirect(url_for('root.home'))
 
 
 @root.route("/stock/used_stock/",  methods=['GET', 'POST'])
