@@ -15,6 +15,7 @@ def create_app():
     app_ = Flask(__name__)
 
     db_url = os.environ.get("CLEARDB_DATABASE_URL", "mysql://root:Imperfect123Cloistered@localhost:3306/car_sales")
+    db_url = urlparse(db_url)
     db_url = db_url.scheme + '://' + db_url.netloc + db_url.path  # Remove any query params
     app_.config.update({
         'SECRET_KEY': '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx',
