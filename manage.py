@@ -2,7 +2,7 @@
 from car_sales import create_app, db
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
-from car_sales.model import CarSale, Makes, Models, UsedStock, Users,
+from car_sales.model import CarSale, Makes, Models, UsedStock, Users
 import car_models as models
 import used_stock as cars
 
