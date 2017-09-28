@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from car_sales import app, db
+from car_sales import create_app, db
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 import car_models as models
 import used_stock as cars
 
-manager = Manager(app)
-migrate = Migrate(app, db)
+manager = Manager(create_app())
+migrate = Migrate(create_app(), db)
 
 manager.add_command('db', MigrateCommand)
 
