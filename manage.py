@@ -19,9 +19,9 @@ manager.add_command('db', MigrateCommand)
 
 @manager.command
 def insert_data():
-    for make in makes:
-        db.session.add(make)
-        db.session.commit()
+    # for make in makes:
+    #     db.session.add(make)
+    #     db.session.commit()
     for model in models:
         db.session.add(model)
         db.session.commit()
