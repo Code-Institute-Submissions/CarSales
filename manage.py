@@ -118,6 +118,8 @@ def insert_data():
     scirocco = Models(name="Scirocco", make=volkswagon)
     db.session.add(scirocco)
 
+    db.session.commit()
+
 
 @manager.command
 def dropdb():
