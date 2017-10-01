@@ -4,7 +4,6 @@ from wtforms.fields import StringField, PasswordField, \
     IntegerField, FloatField
 from flask_wtf.file import FileField
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
-from wtforms.fields.html5 import DateField
 
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from model import Users, UsedStock, Makes, Models

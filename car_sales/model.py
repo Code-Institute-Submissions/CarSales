@@ -6,6 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.sql.expression import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from flask_paginate import Pagination
+
 db = SQLAlchemy()
 
 
@@ -51,12 +53,30 @@ class UsedStock(db.Model):
         return UsedStock.query.all()
 
     @staticmethod
-    def get_used_stock_by_id(stock_id):
-        return UsedStock.query.filter_by(id=stock_id).first_or_404()
+    def get_used_stock_by_id(make):
+        return UsedStock.query.filter_by(id=make.id).first_or_404()
 
     @staticmethod
-    def feature_home_page_stock_item():
+    def home_page_feature_car():
         return UsedStock.query.filter_by(sold=False).order_by(func.random()).first_or_404()
+
+    @staticmethod
+    def search_make_model(make, model):
+        return UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+
+    @staticmethod
+    def paginate_stock_queries(request, queried_stock, page, per_page):
+        search = False
+        q = request.args.get('q')
+        if q:
+            search = True
+
+        return Pagination(page=page, per_page=per_page, total=len(queried_stock), search=search,
+                          record_name='Used Stock', css_framework='bootstrap3')
+
+    @staticmethod
+    def pagination_offset(page, per_page):
+        return page * per_page
 
     def __str__(self):
         return self.make

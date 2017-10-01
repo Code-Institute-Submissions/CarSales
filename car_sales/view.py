@@ -3,8 +3,8 @@ from model import db
 from flask import current_app as app
 from flask import render_template, flash, redirect, url_for, request, jsonify, Blueprint
 from flask_login import login_required, login_user, logout_user
-from flask_paginate import Pagination, get_page_parameter
 from werkzeug import secure_filename
+from flask_paginate import get_page_parameter
 
 from form import LoginForm, SignupForm, EditUser, SearchForm, AddStock
 from model import Users, CarSale, UsedStock, Makes, Models, PaginationObject
@@ -19,31 +19,19 @@ root = Blueprint('root', __name__)
 @root.route("/home/", methods=['GET', 'POST'])
 def home():
     form = SearchForm()
-    used_stock = UsedStock.feature_home_page_stock_item()
-    search = False
-
     if request.method == 'POST':
-        q = request.args.get('q')
-        if q:
-            search = True
-
         make = form.data.get('make')
         model = form.data.get('model')
-        if make is not None and model is not None:
-            page = request.args.get(get_page_parameter(), type=int, default=1)
+        page = request.args.get(get_page_parameter(), type=int, default=1)
+        queried_stock = UsedStock.search_make_model(make, model)
 
-            queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
-            # pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock),
-            #                         record_name='used_stock', css_framework='bootstrap3')
-            pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock),
-                                    search=search, record_name='Used Stock', css_framework='bootstrap3')
+        pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
 
-            flash("Invalid Search Parameter")
-            return render_template("stock/all_used_stock.html",
-                                   queried_stock=queried_stock,
-                                   form=form,
-                                   pagination=pagination)
+        flash("Invalid Search Parameter")
+        return render_template("stock/all_used_stock.html", queried_stock=queried_stock,
+                               form=form, pagination=pagination)
 
+    used_stock = UsedStock.home_page_feature_car()
     return render_template('index.html', used_stock=used_stock, form=form)
 
 
@@ -119,7 +107,7 @@ def logout():
     return redirect(url_for('root.home'))
 
 
-@root.route("/admin/users/edit/<int:user_id>/", methods=["Get", "POST"])
+@root.route("/admin/edit_user/<int:user_id>/", methods=["Get", "POST"])
 @login_required
 def edit_user(user_id):
     user = Users.get_user(user_id)
@@ -142,7 +130,7 @@ def user_table():
     return render_template("admin/user_table.html", users=users)
 
 
-@root.route("/admin/user/disable/<int:user_id>/", methods=["Get"])
+@root.route("/admin/disable_user/<int:user_id>/", methods=["Get"])
 @login_required
 def disable_user(user_id):
     user = Users.get_user(user_id)
@@ -169,67 +157,54 @@ def buy_car(stock_id):
     return redirect(url_for('root.home'))
 
 
-@root.route("/stock/used_stock/",  methods=['GET', 'POST'])
-def show_all_used_stock():
+@root.route("/stock/show_stock/",  methods=['GET', 'POST'])
+def show_stock():
     form = SearchForm()
-    queried_stock = UsedStock.get_all_used_stock()
-    search = False
+    page = request.args.get(get_page_parameter(), type=int, default=1)
 
     if request.method == 'POST':
-        q = request.args.get('q')
-        if q:
-            search = True
-
         make = form.data.get('make')
         model = form.data.get('model')
-        if make is not None and model is not None:
-            page = request.args.get(get_page_parameter(), type=int, default=1)
-            offset = page * per_page
 
-            queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
-            pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock),
-                                    record_name='used_stock', css_framework='bootstrap3')
+        queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+        pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
 
-            flash("Invalid Search Parameter")
-            return render_template("stock/all_used_stock.html",
-                                   queried_stock=queried_stock,
-                                   form=form,
-                                   pagination=pagination)
+        flash("Invalid Search Parameter")
+        return render_template("stock/all_used_stock.html", queried_stock=queried_stock,
+                               form=form, pagination=pagination)
 
-    page = request.args.get(get_page_parameter(), type=int, default=1)
-    offset = page * per_page
-
+    queried_stock = UsedStock.get_all_used_stock()
+    offset = UsedStock.pagination_offset(page, per_page)
     pagination_results = UsedStock.query.limit(per_page).offset(offset).all()
-    pagination = Pagination(page=page, per_page=per_page, total=len(queried_stock),
-                            record_name='used_stock', css_framework='bootstrap3')
+    pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
 
-    return render_template("stock/all_used_stock.html",
-                           queried_stock=pagination_results,
-                           form=form,
-                           pagination=pagination)
+    return render_template("stock/all_used_stock.html", queried_stock=pagination_results,
+                           form=form, pagination=pagination)
 
 
+# method to populate the models select list on the search form
 @root.route('/stock/return_models/<int:make_id>/', methods=['GET'])
 def return_models(make_id):
-    if make_id is not None:
-        make = Makes.query.filter_by(id=make_id).first()
-        models = [(row.id, row.name) for row in Models.query.filter_by(make=make).all()]
-        return jsonify(models)
-    return redirect(url_for('root.home'))
+    make = Makes.query.filter_by(id=make_id).first()
+    models = [(row.id, row.name) for row in Models.query.filter_by(make=make).order_by('name').all()]
+    return jsonify(models)
 
 
-@root.route('/stock/search_results/', methods=['GET', 'POST'])
-def search_stock():
-    return render_template('stock/all_used_stock.html')
+# @root.route('/stock/search_results/', methods=['GET', 'POST'])
+# def search_stock():
+#     return render_template('stock/all_used_stock.html')
 
 
+# route to history page
 @root.route('/stock/sales_history/', methods=['GET'])
+@login_required
 def sales_history():
     sales = CarSale.get_all_orders()
     return render_template('stock/sales_history.html', sales=sales)
 
 
-@root.route('/stock/sales_history/reporting_bar_chart/', methods=['GET', 'POST'])
+# method for ajax call in basic_chart.js
+@root.route('/stock/sales_history/history_dashboard/', methods=['GET', 'POST'])
 @login_required
 def prepare_chart():
     sales = CarSale.get_all_orders()

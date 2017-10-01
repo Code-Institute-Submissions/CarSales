@@ -22,7 +22,6 @@ Users
     </thead>
     <tbody>
     {% for user in users %}
-
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.first_name }}</td>
@@ -30,7 +29,7 @@ Users
             <td>{{ user.email }}</td>
             <td>{{ user.is_active }}</td>
             <td>
-                <a type=button"  data-toggle="tooltip" title="Edit User"
+                <a type="button"  data-toggle="tooltip" title="Edit User"
                         href="{{ url_for('root.edit_user', user_id=user.id) }}">
                     <span class="fa fa-pencil fa-2x"></span>
                 </a>

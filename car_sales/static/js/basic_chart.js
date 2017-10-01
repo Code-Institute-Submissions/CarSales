@@ -1,6 +1,6 @@
 $.ajax({
     type: 'GET',
-    url:'reporting_bar_chart',
+    url:'history_dashboard',
     success: function(data) {
         console.log(data);
 
