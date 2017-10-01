@@ -4,9 +4,6 @@ from car_sales.model import db
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 from car_sales.model import CarSale, Makes, Models, UsedStock, Users
-import car_makes as makes
-import car_models as models
-import used_stock as cars
 
 app = create_app()
 db.init_app(app)
@@ -102,7 +99,7 @@ def insert_data():
     db.session.add(fairlady_350)
     fairlady = Models(name="Fairlady Z", make=nissan)
     db.session.add(fairlady)
-    fairlady_370 = Models(name="370Z", make=makes.nissan)
+    fairlady_370 = Models(name="370Z", make=nissan)
     db.session.add(fairlady_370)
     impreza = Models(name="Impreza", make=subaru)
     db.session.add(impreza)
