@@ -19,7 +19,7 @@
                 {% if current_user.is_authenticated %}
                     <a class="navbar-brand" href="{{ url_for('root.sales_history') }}">History</a>
                     <a class="navbar-brand" href="{{ url_for('root.add_stock') }}">Add Stock</a>
-                    <a class="navbar-brand" href="{{ url_for('.rootuser_table') }}">Users</a>
+                    <a class="navbar-brand" href="{{ url_for('root.user_table') }}">Users</a>
                     <a class="navbar-brand" href="{{ url_for('root.logout') }}">Log Out</a>
                 {% else %}
                     <a class="navbar-brand" href="{{ url_for('root.login') }}">Sign In</a>
