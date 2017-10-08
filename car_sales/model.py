@@ -62,8 +62,8 @@ class UsedStock(db.Model):
 
     @staticmethod
     def search_make_model(make, model):
-        #return db.session.query_property(UsedStock.make == make, UsedStock.model == model )
-        return UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+        return db.session.query_property(UsedStock.make.like(make), UsedStock.model.like(model))
+        # return UsedStock.query.filter_by(make.name.like('%'+make+'%'), model.name.like('%'+model+'%')).all()
 
     @staticmethod
     def paginate_stock_queries(request, queried_stock, page, per_page):
@@ -77,7 +77,7 @@ class UsedStock(db.Model):
 
     @staticmethod
     def pagination_offset(page, per_page):
-        return page * per_page
+        return page * per_page - per_page
 
     def __str__(self):
         return self.make

@@ -2,7 +2,6 @@ $.ajax({
     type: 'GET',
     url:'history_dashboard',
     success: function(data) {
-        //console.log(data);
         prepareCharts(data);
     },
     failure: function(response){
@@ -11,15 +10,13 @@ $.ajax({
 });
 
 var monthNames = ["January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December"
-];
-
-var colours = ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00',
-    '#a65628', '#bc8f8f', '#8b4789', '#3a5fcd', '#607b8b', '#4a708b',
-    '#fb6fb4', '#008b76', '#b82000', '#f9a114', '#00738', '#778217'
-];
-
-var parseDate = d3.time.format("%Y-%m-%d").parse;
+    "July", "August", "September", "October", "November", "December"
+    ],
+    colours = ['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00',
+        '#a65628', '#bc8f8f', '#8b4789', '#3a5fcd', '#607b8b', '#4a708b',
+        '#fb6fb4', '#008b76', '#b82000', '#f9a114', '#00738', '#778217'
+    ],
+    parseDate = d3.time.format("%Y-%m-%d").parse;
 
 function prepareCharts(salesData){
     var cf = crossfilter(salesData);
@@ -60,11 +57,6 @@ function preparePieChart(cf, chartDimension, chartId){
         .cx(400)
         .dimension(dimension)
         .group(group);
-
-        $(window).resize(function() {
-            redrawCharts('pie', pieChart, chartId);
-        });
-
 };
 
 function prepareRowChart(cf, chartDimension, chartId){
@@ -81,10 +73,6 @@ function prepareRowChart(cf, chartDimension, chartId){
         .dimension(dimension)
         .group(group)
         .xAxis().ticks(6);
-
-        $(window).resize(function() {
-            redrawCharts('row', rowChart, '#models_row_chart');
-        });
 };
 
 function prepareBarChart(cf, chartDimension, chartId){

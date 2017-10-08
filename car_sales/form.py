@@ -44,6 +44,8 @@ class EditUser(Form):
 class SearchForm(Form):
     make = QuerySelectField(query_factory=lambda: Makes.query.order_by("name").all(), get_label="name", default="Any")
     model = QuerySelectField(query_factory=lambda: Models.query.order_by("name").all(), get_label="name")
+    # make = StringField("Make", validators=[DataRequired()])
+    # model = StringField("Model")
     submit = SubmitField("Search Stock")
 
 

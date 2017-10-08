@@ -9,7 +9,7 @@ from flask_paginate import get_page_parameter
 from form import LoginForm, SignupForm, EditUser, SearchForm, AddStock
 from model import Users, CarSale, UsedStock, Makes, Models, PaginationObject
 
-per_page = 5
+per_page = 3
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 root = Blueprint('root', __name__)
@@ -18,57 +18,8 @@ root = Blueprint('root', __name__)
 @root.route("/")
 @root.route("/home/", methods=['GET', 'POST'])
 def home():
-    form = SearchForm()
-    if request.method == 'POST':
-        make = form.data.get('make')
-        model = form.data.get('model')
-        page = request.args.get(get_page_parameter(), type=int, default=1)
-        queried_stock = UsedStock.search_make_model(make, model)
-
-        pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
-
-        flash("Invalid Search Parameter")
-        return render_template("stock/all_used_stock.html", queried_stock=queried_stock,
-                               form=form, pagination=pagination)
-
     used_stock = UsedStock.home_page_feature_car()
-    return render_template('index.html', used_stock=used_stock, form=form)
-
-
-@root.route("/stock/add_stock/", methods=["GET", "POST"])
-@login_required
-def add_stock():
-    form = AddStock()
-    if request.method == 'POST':
-        filename = ""
-        if form.image_location.data != "":
-            filename = secure_filename(form.image_location.data.filename)
-            #form.image_location.data.save(app.config['UPLOAD_FOLDER'] + "\\" + filename)
-
-        stock = UsedStock(
-            make=form.make.data,
-            model=form.model.data,
-            year=form.year.data,
-            fuel_type=form.fuel_type.data,
-            engine_size=form.engine_size.data,
-            seats=form.seats.data,
-            colour=form.colour.data,
-            transmission=form.transmission.data,
-            mileage=form.mileage.data,
-            image_location=filename,
-            price=form.price.data,
-            description=form.description.data,
-            sold=form.sold.data)
-
-        db.session.add(stock)
-        db.session.commit()
-        return redirect(url_for('root.home'))
-    return render_template("stock/add_stock.html", form=form)
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return render_template('index.html', used_stock=used_stock)
 
 
 @root.route("/signup/", methods=["GET", "POST"])
@@ -146,6 +97,43 @@ def contact_us():
     return render_template('admin/contact_us.html')
 
 
+
+@root.route("/stock/add_stock/", methods=["GET", "POST"])
+@login_required
+def add_stock():
+    form = AddStock()
+    if request.method == 'POST':
+        filename = ""
+        if form.image_location.data != "":
+            filename = secure_filename(form.image_location.data.filename)
+            form.image_location.data.save(app.config['UPLOAD_FOLDER'] + "\\" + filename)
+
+        stock = UsedStock(
+            make=form.make.data,
+            model=form.model.data,
+            year=form.year.data,
+            fuel_type=form.fuel_type.data,
+            engine_size=form.engine_size.data,
+            seats=form.seats.data,
+            colour=form.colour.data,
+            transmission=form.transmission.data,
+            mileage=form.mileage.data,
+            image_location=filename,
+            price=form.price.data,
+            description=form.description.data,
+            sold=form.sold.data)
+
+        db.session.add(stock)
+        db.session.commit()
+        return redirect(url_for('root.home'))
+    return render_template("stock/add_stock.html", form=form)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @root.route('/stock/buy_car/<int:stock_id>', methods=['GET', 'POST'])
 def buy_car(stock_id):
     sale = CarSale(order_date=datetime.now(), used_stock_id=stock_id)
@@ -163,10 +151,10 @@ def show_stock():
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
     if request.method == 'POST':
-        make = form.data.get('make')
-        model = form.data.get('model')
+        makeQuery = form.data.get('make')
+        modelQuery = form.data.get('model')
 
-        queried_stock = UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
+        queried_stock = UsedStock.query.filter_by(make=makeQuery, model=modelQuery).all()
         pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
 
         flash("Invalid Search Parameter")
