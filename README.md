@@ -33,6 +33,7 @@ Staff:
 ### Development Issues
   - SQLAlchemy Operational Errors - On the homepage and used stock pages the queries to pull data will sometimes take too long to complete or they don't receve a full answer on the first time of asking, so Heroku throws an internal error. (I think the course could go into sql optimisations a bit, this is supposed to be a stream on back-end development.)
   - **Fixed** Flask-Paginate - The last page of the flask paginate query is alwas empty. No matter how much data goes into the database or the query filters. 
+  - Sometimes there is an Operational Error. It happens because MySQL doesn't receive a complete answer from the server. It can happen with the User or UsedStock. 
 
 ## Tech Used
 
