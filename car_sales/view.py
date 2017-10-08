@@ -1,4 +1,5 @@
 from datetime import datetime
+import os, json, boto3
 from model import db
 from flask import current_app as app
 from flask import render_template, flash, redirect, url_for, request, jsonify, Blueprint
@@ -43,7 +44,7 @@ def add_stock():
         filename = ""
         if form.image_location.data != "":
             filename = secure_filename(form.image_location.data.filename)
-            form.image_location.data.save(app.config['UPLOAD_FOLDER'] + "\\" + filename)
+            #form.image_location.data.save(app.config['UPLOAD_FOLDER'] + "\\" + filename)
 
         stock = UsedStock(
             make=form.make.data,
@@ -203,7 +204,7 @@ def sales_history():
     return render_template('stock/sales_history.html', sales=sales)
 
 
-# method for ajax call in basic_chart.js
+# method for ajax call in sales_charts.js
 @root.route('/stock/sales_history/history_dashboard/', methods=['GET', 'POST'])
 @login_required
 def prepare_chart():

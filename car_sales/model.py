@@ -62,6 +62,7 @@ class UsedStock(db.Model):
 
     @staticmethod
     def search_make_model(make, model):
+        #return db.session.query_property(UsedStock.make == make, UsedStock.model == model )
         return UsedStock.query.filter_by(make_id=make.id, model_id=model.id).all()
 
     @staticmethod
@@ -136,7 +137,7 @@ class CarSale(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'order_date': self.order_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'order_date': self.order_date.strftime('%Y-%m-%d'),
             'used_stock_id': self.used_stock_id,
             'make': self.used_stock.make.name,
             'model': self.used_stock.model.name,

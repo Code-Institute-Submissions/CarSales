@@ -28,7 +28,7 @@
     <body>
         {% include 'shared/navbar.html' %}
         <hr>
-        <div class="container page-wrap">
+        <div class="page-wrap">
             <div class="main-wrapper clearfix">
                 {% block jumbotron %}
                 {% endblock %}
@@ -46,7 +46,10 @@
         <script src="{{ url_for('static', filename='js/jquery.min.js')}}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap.min.js')}}"></script>
         <script src="{{ url_for('static', filename='js/vendor/bootstrap.min.js') }}"></script>
-        <script type='text/javascript' src='https://d3js.org/d3.v3.js'></script>
+        <script src="{{ url_for('static', filename='js/d3.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/dc.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/keen.min.js')}}"></script>
+        <script src="{{ url_for('static', filename='js/queue.js')}}"></script>
 
         <script src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.js"></script>
