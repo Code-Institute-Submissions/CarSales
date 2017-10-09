@@ -4,7 +4,7 @@ from car_sales.model import db
 from flask_script import Manager, prompt_bool
 from flask_migrate import Migrate, MigrateCommand
 from car_sales.model import CarSale, Makes, Models, UsedStock, Users
-from used_stock import cars
+
 
 app = create_app()
 db.init_app(app)
@@ -14,12 +14,6 @@ migrate = Migrate(app, db)
 manager = Manager(app)
 manager.add_command('db', MigrateCommand)
 
-
-@manager.command
-def insert_data():
-    for car in cars:
-        db.session.add(car)
-        db.session.commit()
 
 @manager.command
 def dropdb():

@@ -18,8 +18,7 @@ root = Blueprint('root', __name__)
 @root.route("/")
 @root.route("/home/", methods=['GET', 'POST'])
 def home():
-    used_stock = UsedStock.home_page_feature_car()
-    return render_template('index.html', used_stock=used_stock)
+    return render_template('index.html')
 
 
 @root.route("/signup/", methods=["GET", "POST"])
@@ -151,10 +150,8 @@ def show_stock():
     page = request.args.get(get_page_parameter(), type=int, default=1)
 
     if request.method == 'POST':
-        makeQuery = form.data.get('make')
         modelQuery = form.data.get('model')
-
-        queried_stock = UsedStock.query.filter_by(make=makeQuery, model=modelQuery).all()
+        queried_stock = UsedStock.query.filter_by(model=modelQuery).all()
         pagination = UsedStock.paginate_stock_queries(request, queried_stock, page, per_page)
 
         flash("Invalid Search Parameter")
@@ -173,17 +170,11 @@ def show_stock():
 # method to populate the models select list on the search form
 @root.route('/stock/return_models/<int:make_id>/', methods=['GET'])
 def return_models(make_id):
-    make = Makes.query.filter_by(id=make_id).first()
+    make = Makes.query.filter_by(id=make_id).one_or_none()
     models = [(row.id, row.name) for row in Models.query.filter_by(make=make).order_by('name').all()]
     return jsonify(models)
 
 
-# @root.route('/stock/search_results/', methods=['GET', 'POST'])
-# def search_stock():
-#     return render_template('stock/all_used_stock.html')
-
-
-# route to history page
 @root.route('/stock/sales_history/', methods=['GET'])
 @login_required
 def sales_history():
@@ -191,7 +182,6 @@ def sales_history():
     return render_template('stock/sales_history.html', sales=sales)
 
 
-# method for ajax call in sales_charts.js
 @root.route('/stock/sales_history/history_dashboard/', methods=['GET', 'POST'])
 @login_required
 def prepare_chart():

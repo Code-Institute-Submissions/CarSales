@@ -21,7 +21,8 @@ def create_app():
         'SECRET_KEY': '\xfe\xd6\xef\x82#/\x85\xbe\xcc\r\xcd\x89\x15\xe9,\xd0V\xa4%\xffH\x98kx',
         'SQLALCHEMY_DATABASE_URI': db_url,
         'UPLOAD_FOLDER': 'static\img\stock',
-        'DEBUG': True})
+        'DEBUG': True,
+        'SQLALCHEMY_POOL_TIMEOUT': 10})
 
     db.init_app(app_)
     heroku.init_app(app_)

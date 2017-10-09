@@ -30,9 +30,6 @@ class UsedStock(db.Model):
     __tablename__ = 'used_stock'
     __table_args__ = {'extend_existing': 'True'}
     id = db.Column(db.Integer, primary_key=True)
-    make = db.relationship('Makes', lazy='joined',
-                            backref=db.backref('make_name', lazy='dynamic'))
-    make_id = db.Column(db.Integer, db.ForeignKey("makes.id"))
     model = db.relationship('Models', lazy='joined',
                            backref=db.backref('models', lazy='dynamic'))
     model_id = db.Column(db.Integer, db.ForeignKey("models.id"))
@@ -52,18 +49,9 @@ class UsedStock(db.Model):
     def get_all_used_stock():
         return UsedStock.query.all()
 
-    @staticmethod
-    def get_used_stock_by_id(make):
-        return UsedStock.query.filter_by(id=make.id).first_or_404()
-
-    @staticmethod
-    def home_page_feature_car():
-        return UsedStock.query.filter_by(sold=False).order_by(func.random()).first_or_404()
-
-    @staticmethod
-    def search_make_model(make, model):
-        return db.session.query_property(UsedStock.make.like(make), UsedStock.model.like(model))
-        # return UsedStock.query.filter_by(make.name.like('%'+make+'%'), model.name.like('%'+model+'%')).all()
+    # @staticmethod
+    # def search_make_model(make, model):
+    #     return db.session.query_property(UsedStock.model.make.like(make), UsedStock.model.like(model))
 
     @staticmethod
     def paginate_stock_queries(request, queried_stock, page, per_page):
@@ -139,7 +127,7 @@ class CarSale(db.Model):
             'id': self.id,
             'order_date': self.order_date.strftime('%Y-%m-%d'),
             'used_stock_id': self.used_stock_id,
-            'make': self.used_stock.make.name,
+            'make': self.used_stock.model.make.name,
             'model': self.used_stock.model.name,
             'year': self.used_stock.year,
             'fuel_type': self.used_stock.fuel_type,

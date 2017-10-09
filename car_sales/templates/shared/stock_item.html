@@ -1,7 +1,7 @@
 <div class="panel panel-primary">
     <div class="panel-heading">
         <p>
-            <span class="strong text-uppercase" style="font-size:1.3em;">{{ used_stock.make.name }} {{ used_stock.model.name }}</span>  &nbsp&nbsp  Year: {{ used_stock.year }}
+            <span class="strong text-uppercase" style="font-size:1.3em;">{{ used_stock.model.make.name }} {{ used_stock.model.name }}</span>  &nbsp&nbsp  Year: {{ used_stock.year }}
             &nbsp&nbsp Transmission: {{ used_stock.transmission }} &nbsp&nbsp   Colour: {{ used_stock.colour }}
             &nbsp&nbsp  Fuel: {{ used_stock.fuel_type }}
         </p>
@@ -16,7 +16,7 @@
 
         <div class="panel-body">
             <div class="col-md-5">
-                <img src="{{ url_for('static', filename='img/stock/' + used_stock.image_location)}}" class="img-responsive" alt="{{  used_stock.make.name + ' ' + used_stock.model.name }}"/>
+                <img src="{{ url_for('static', filename='img/stock/' + used_stock.image_location)}}" class="img-responsive" alt="{{  used_stock.model.make.name + ' ' + used_stock.model.name }}"/>
             </div>
             <div class="col-md-7">
                 {{ used_stock.description }}
