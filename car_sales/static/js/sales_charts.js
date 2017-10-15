@@ -1,3 +1,5 @@
+var pieChart, rowChart;
+
 $.ajax({
     type: 'GET',
     url:'history_dashboard',
@@ -8,6 +10,10 @@ $.ajax({
        console.log("Failure");
     }
 });
+
+function getScreenWidth(){
+    return $('html').width();
+};
 
 var monthNames = ["January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -40,7 +46,7 @@ function prepareCharts(salesData){
 };
 
 function preparePieChart(cf, chartDimension, chartId){
-    var pieChart = dc.pieChart(chartId),
+    pieChart = dc.pieChart(chartId),
         dimension = cf.dimension(function(d){
             return d[chartDimension];
         }),
@@ -48,10 +54,9 @@ function preparePieChart(cf, chartDimension, chartId){
 
     pieChart
         .ordinalColors(colours)
-        .width(870)
+        .width(860)
         .height(350)
         .radius(150)
-        .innerRadius(50)
         .legend(dc.legend().x(20).y(20).itemHeight(15).gap(5))
         .transitionDuration(1500)
         .cx(400)
@@ -60,17 +65,19 @@ function preparePieChart(cf, chartDimension, chartId){
 };
 
 function prepareRowChart(cf, chartDimension, chartId){
-    var rowChart = dc.rowChart(chartId),
+    rowChart = dc.rowChart(chartId),
         dimension = cf.dimension(function(d){
             return d[chartDimension];
         }),
         group = dimension.group();
+    var width = $(window).width() > 900 ? 860 : 600;
 
     rowChart
         .ordinalColors(colours)
-        .width(870)
-        .height(350)
+        .width(width)
+        .height(500)
         .dimension(dimension)
+        .elasticX(true)
         .group(group)
         .xAxis().ticks(6);
 };
@@ -178,40 +185,43 @@ function prepareTotals(cf, chartId){
 };
 
 function redrawCharts(chartType, chart, chartId){
-
     switch(chartType){
         case 'pie':
             var chartWidth = $(chartId).width();
-            var chartRadius = chart.radius();
-            var chartInnerRadius = chart.innerRadius();
-            var cx = chart.cx();
-            console.log(chartWidth + "\n" + chartRadius + "\n" + cx);
-            pieRadius = chartWidth <= 860 ? chartRadius : 100;
-            innerRadius = chartWidth <= 860 ? chartInnerRadius : 0;
-            cx = chartWidth <= 860 ? cx : 200;
+            pieRadius = chartWidth >= 860 ? 200 : chartWidth * 0.35;
 
-            chart
+            chart.width(chartWidth)
+                .cx([chartWidth / 2])
                 .radius(pieRadius)
-                .innerRadius(innerRadius)
-                .cx(cx)
                 .redraw();
 
-             chart.render();
             break;
         case 'row':
-            var chartWidth = $(chartId).width();
-            var chartHeight = $(chartId).height();
-            chartWidth = chartWidth <= 860 ? d3.min([chartWidth, chartHeight]) : d3.min([chartWidth / 2, chartHeight / 2]);
+            var width = $(window).width() > 900 ? 860 : 600;
 
-            chart
-                .width(chartWidth)
-                .height(chartHeight)
+            rowChart.width(width)
+                .rescale()
                 .redraw();
 
-            chart.render();
+            rowChart.render();
+            rowChart.transitionDuration(750);
+
             break;
         default:
             console.log("No charts type found");
             break;
     }
 };
+
+$(window).resize(function() {
+    redrawCharts('pie', pieChart, '#makes_pie_chart');
+    redrawCharts('pie', pieChart, '#colour_pie_chart');
+    redrawCharts('pie', pieChart, '#transmission_pie_chart');
+    redrawCharts('pie', pieChart, '#fuel_pie_chart');
+    redrawCharts('pie', pieChart, '#seats_pie_chart');
+    redrawCharts('pie', pieChart, '#engine_pie_chart');
+
+    redrawCharts('row', rowChart, '#models_row_chart');
+
+    console.log($(window).width());
+});

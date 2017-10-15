@@ -22,7 +22,9 @@ def create_app():
         'SQLALCHEMY_DATABASE_URI': db_url,
         'UPLOAD_FOLDER': 'static\img\stock',
         'DEBUG': True,
-        'SQLALCHEMY_POOL_TIMEOUT': 10})
+        'SQLALCHEMY_POOL_RECYCLE': 499,
+        'SQLALCHEMY_POOL_TIMEOUT': 20
+    })
 
     db.init_app(app_)
     heroku.init_app(app_)

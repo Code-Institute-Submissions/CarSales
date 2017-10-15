@@ -31,9 +31,9 @@ Staff:
   - Image Upload - Looking at using AWS S3 but if 
 
 ### Development Issues
-  - SQLAlchemy Operational Errors - On the homepage and used stock pages the queries to pull data will sometimes take too long to complete or they don't receve a full answer on the first time of asking, so Heroku throws an internal error. (I think the course could go into sql optimisations a bit, this is supposed to be a stream on back-end development.)
   - **Fixed** Flask-Paginate - The last page of the flask paginate query is alwas empty. No matter how much data goes into the database or the query filters. 
-  - Sometimes there is an Operational Error. It happens because MySQL doesn't receive a complete answer from the server. It can happen with the User or UsedStock. 
+  - **Partially Fixed** Sometimes there is an Operational Error. It happens because MySQL doesn't receive a complete answer from the server. It can happen with the User or UsedStock.  If the website is left idle for about 5 minutes, we still receive an operational error as sqlalchemy tries to query the user table. I added a connection timeout to the app_config and removed the relationship between usedstock and make as mkae was accesible through the usedstock and model relationship. 
+  - Sales Bar Chart - I can't seem to get a bar chart to render using order dates. The grouping has the expected data it just doesn't appear on the graph. 
 
 ## Tech Used
 
