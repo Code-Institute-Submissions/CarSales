@@ -22,8 +22,8 @@ def create_app():
         'SQLALCHEMY_DATABASE_URI': db_url,
         'UPLOAD_FOLDER': 'static\img\stock',
         'DEBUG': True,
-        'SQLALCHEMY_POOL_RECYCLE': 499,
-        'SQLALCHEMY_POOL_TIMEOUT': 20
+        'SQLALCHEMY_POOL_RECYCLE': 600,
+        'SQLALCHEMY_POOL_TIMEOUT': 90
     })
 
     db.init_app(app_)

@@ -200,7 +200,6 @@ function redrawCharts(chartType, chart, chartId){
             var width = $(window).width() > 900 ? 860 : 600;
 
             rowChart.width(width)
-                .rescale()
                 .redraw();
 
             rowChart.render();

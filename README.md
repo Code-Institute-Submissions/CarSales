@@ -4,13 +4,12 @@
 
 ### What is this app for?
  
-Front-end and Back-end website used for a small family owned business. 
+Front-end and Back-end website used for a small family owned car dealership business. 
  
 ### What does it do?
  
 The application serves both the general public and the owner/staff of the business.
 
-## Features
 
 ### Existing Features. 
 
@@ -26,14 +25,15 @@ Staff:
   - Add Stock - Insert functionality to add stock for sale. I have implemented image upload for localhost and local file-system. This does not work for live system. 
   - History - This contains a number of different pie charts, a row chart and a data table. I tried to implement a timeline bar chart but could not get the graph to draw. The code for this is still available in the sales_chart.js file. 
 
-### Features Left Out But Plan To Include (either before or after project hand-in)
-  - Sales Timeline Bar Chart
+### Features Left Out 
   - Image Upload - Looking at using AWS S3 but if 
+
 
 ### Development Issues
   - **Fixed** Flask-Paginate - The last page of the flask paginate query is alwas empty. No matter how much data goes into the database or the query filters. 
-  - **Partially Fixed** Sometimes there is an Operational Error. It happens because MySQL doesn't receive a complete answer from the server. It can happen with the User or UsedStock.  If the website is left idle for about 5 minutes, we still receive an operational error as sqlalchemy tries to query the user table. I added a connection timeout to the app_config and removed the relationship between usedstock and make as mkae was accesible through the usedstock and model relationship. 
+  - Operational Error 'Lost Connection To Database'. It happens because MySQL doesn't receive a complete answer from the server. It primarily haapens with the User table. If the website is left idle for over 60 seconds, ** This is apparently normal behaviour for clearDB **. The solution I have found is to set the pool recycling to a number higher that the default. This does not make a difference. I still receive the error.  
   - Sales Bar Chart - I can't seem to get a bar chart to render using order dates. The grouping has the expected data it just doesn't appear on the graph. 
+  - The Pie Charts are unresponsive to mouse clicks when the screen goes below a certain width. 
 
 ## Tech Used
 
@@ -58,4 +58,5 @@ Staff:
     - The three packages above are used to manipulate and display our data in some way or another. 
 
 
-Credit: CodeInstitue for the README.md file as I have copied and edited from the Angular ToDo application.
+Credit: I received some advice on how to use Blueprints in Flask from a former colleague. 
+        There was a lot of reading and copy/pasting of code when setting up the cleardb add-on in Heroku with gunicorn. So stackoverflow and the heroku tutorial deserves credit here.
