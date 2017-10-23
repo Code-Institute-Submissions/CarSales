@@ -1,53 +1,163 @@
 {% extends "base.html" %}
 
+{% block title %}
+Sales History
+{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="container">
-        <div class="col-md-6" id="sales_row_chart" ></div>
-        <div class="col-md-3" id="makes_pie_chart"></div>
-        <div class="col-md-3" id="models_pie_chart"></div>
-        <div class="col-md-12" id="sales_line_chart"></div>
-    </div>
-</div>
-<div class="row">
-    <div class="container">
-        <h1 class="text-center">
-            Order History
-        </h1>
-        <div class="panel panel-primary" id="history-data-table">
-            {% if sales != null %}
-                <table class="table table-stripped" id="dc-data-table">
+    <div class="container-fluid">
+        <div class="col-md-6">
+            <div class="panel panel-primary" id="history-data-table" >
+                {% if sales != null %}
                     <div class="panel-heading">
-                        <thead>
-                            <th>Order Date</th>
-                            <th>Make</th>
-                            <th>Model</th>
-                            <th>Year</th>
-                            <th>Price</th>
-                            <th>Engine Size</th>
-                            <th>Seats</th>
-                            <th>Colour</th>
-                            <th>Fuel Type</th>
-                            <th>Mileage</th>
-                        </thead>
-                    </div>
-                    <div class="panel-body">
-                        <tbody>
+                        <div class="chart-wrapper" data-position="right">
+                            <div class="totals">
+                                <div class="chart-title">&nbsp Units Sold <div class=pull-right" id="total-sales"></div></div>
+                                <div class="chart-stage">
 
-                        </tbody>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </table>
+                    <table class="table table-responsive table-stripped" id="dc-data-table" >
+                            <thead>
+                                <th>Order Date</th>
+                                <th>Make</th>
+                                <th>Model</th>
+                                <th>Year</th>
+                                <th>Price</th>
+                                <th>Engine Size</th>
+                                <th>Seats</th>
+                                <th>Colour</th>
+                                <th>Fuel Type</th>
+                                <th>Mileage</th>
+                            </thead>
+                        <div class="panel-body" style="min-height: 100%;">
+                            <tbody>
+
+                            </tbody>
+                        </div>
+                    </table>
+                {% else %}
+                    <p>
+                        No Previous Orders
+                    </p>
+                {% endif %}
             </div>
-            {% else %}
-                <p>
-                    No Previous Orders
-                </p>
-            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <div class="col-md-12 jumbotron">
+                <ul class="nav nav-pills">
+                    <li class="active">
+                        <a data-toggle="pill" href="#make-tab">
+                            Makes
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#colour-tab">
+                            Colour
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#transmission-tab">
+                            Transmission
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#fuel-tab">
+                            Fuel
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#engine-tab">
+                            Engine Size
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="pill" href="#seats-tab">
+                            Seats
+                        </a>
+                    </li>
+                    <li class="pull-right">
+                        <button class="btn btn-primary" id="reset-button" data-toggle="pill">
+                            Reset Charts
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div id="make-tab" class="tab-pane fade in active">
+                        <div class="chart-container">
+                            <div class="chart-wrapper">
+                                <div class="chart-title">
+                                    Sales By Make
+                                </div>
+                                <div class="col-md-12" id="makes_pie_chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="colour-tab" class="tab-pane fade">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Sales By Colour
+                            </div>
+                            <div class="col-md-12" id="colour_pie_chart"></div>
+                        </div>
+                    </div>
+                    <div id="transmission-tab" class="tab-pane fade">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Sales By Transmission
+                            </div>
+                            <div class="col-md-12" id="transmission_pie_chart"></div>
+                        </div>
+                    </div>
+                    <div id="fuel-tab" class="tab-pane fade">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Sales By Fuel Type
+                            </div>
+                            <div class="col-md-12" id="fuel_pie_chart"></div>
+                        </div>
+                    </div>
+                    <div id="engine-tab" class="tab-pane fade">
+                        <div class="chart-wrapper">
+                            <div class="chart-title">
+                                Sales By Engine Capacity
+                            </div>
+                            <div class="col-md-12" id="engine_pie_chart"></div>
+                        </div>
+                    </div>
+                    <div id="seats-tab" class="tab-pane fade">
+                        Sales By No. of Seats
+                        <div class="col-md-12" id="seats_pie_chart"></div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-8">
+                    <div class="chart-wrapper">
+                        <div class="chart-title">
+                            Models Sold
+                        </div>
+                        <div class="chart-stage">
+                            <div id="models_row_chart"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div id="sale_timeline"></div>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static', filename='js/basic_chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sales_charts.js') }}"></script>
+<script>
+    $('#reset-button').on('click', function(){
+        location.reload();
+    });
+</script>
+
 {% endblock %}
