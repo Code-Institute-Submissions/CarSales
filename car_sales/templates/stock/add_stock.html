@@ -1,0 +1,71 @@
+{% extends"base.html" %}
+{% from "form_macros.html" import render_field %}
+
+{% block title %}
+Add Stock
+{% endblock %}
+
+{% block jumbotron %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <section>
+            <h1 class="text-center" style="clear: both">
+                Add Stock
+            </h1>
+            <form action="" method="post" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="container-fluid">
+                    <div class="col-md-3">
+
+                    </div>
+                    <div class="col-md-6">
+                        {{ render_field(form.make, class='form-control', type='select') }}
+                        {{ render_field(form.model,  class='form-control', type='select') }}
+                        {{ render_field(form.year,  class='form-control', type='text') }}
+                        {{ render_field(form.fuel_type,  class='form-control', type='text') }}
+
+                        {{ render_field(form.engine_size, size=10, class='form-control', type='text') }}
+                        {{ render_field(form.seats,  class='form-control', type='text') }}
+                        {{ render_field(form.colour,  class='form-control', type='text') }}
+                        {{ render_field(form.transmission,  class='form-control', type='text') }}
+                        {{ render_field(form.mileage,  class='form-control', type='text') }}
+
+                        <label id="file_upload" class="label-control">Upload Image</label>
+                        <span class="form-control" type="file">{{ form.image_location }}</span>
+
+                        {{ render_field(form.price,  class='form-control', type='text') }}
+                        {{ render_field(form.description,  class='form-control', type='text') }}
+                        {{ render_field(form.sold,  class='form-check', type='checkbox') }}
+
+                        {{ render_field(form.submit, class='btn btn-primary') }}
+                    </div>
+                    <div class="col-md-3">
+
+                    </div>
+                </div>
+            </form>
+        </section>
+    </div>
+{% endblock %}
+
+{% block messages %}
+    <div class="row">
+        <article class="flashes" style="margin-left:40%;">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                    {% for message in messages %}
+                      <li>{{ message }}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        </article>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
