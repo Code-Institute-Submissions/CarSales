@@ -13,41 +13,38 @@ View Stock
 {% block content %}
 <div class="row">
     <div class="container">
-        <div class="col-sm-9">
+        <div class="col-md-9">
             <div class="pagination-page-info">
                 {{ pagination.info }}
                 {{ pagination.links }}
             </div>
             {% for used_stock in queried_stock %}
                 {% include 'shared/stock_item.html' %}
-
             {% endfor %}
         </div>
         <div class="col-md-3">
-            {% include 'shared/search.html' %}
-
-            <aside>
-                <div id="address-details" class="col-md-12 well text-center" style="">
-                    <h3><span class="fa fa-map-marker"></span> Where You Can Find Us</h3>
-                    <span id="businesss-name">
-                        Horan & Sons,<br>
-                    </span>
-                    <span id="street-address">Mill Chase</span>,<br>
-                    <span id="region">West Yorkshire</span>,<br>
-                    <span id="postal-code">WF2 9SN</span>
-                </div>
-                <div id="contact-details" class="col-md-12 well text-center" style="">
-                    <h3>
-                        Get in touch online or give us a call on</br>
-                        <strong>01924 *** *** </strong>
-                    </h3>
-                    <button class="col-md-9 btn btn-primary text-center" style="">
-                        <span class="fa fa-envelope" aria-hidden="true">  Send Us An Email</span>
-                    </button>
-                </div>
-            </aside>
+            <div class="well col-md-12">
+                {% include 'shared/search.html' %}
+            </div>
+            <div id="address-details" class="col-md-12 well text-center" style="">
+                <h3><span class="fa fa-map-marker"></span> Where You Can Find Us</h3>
+                <span id="businesss-name">
+                    Horan & Sons,<br>
+                </span>
+                <span id="street-address">Mill Chase</span>,<br>
+                <span id="region">West Yorkshire</span>,<br>
+                <span id="postal-code">WF2 9SN</span>
+            </div>
+            <div id="contact-details" class="col-md-12 well text-center" style="">
+                <h3>
+                    Get in touch online or give us a call on</br>
+                    <strong>01924 *** *** </strong>
+                </h3>
+                <button class="col-md-9 btn btn-primary text-center" style="">
+                    <span class="fa fa-envelope" aria-hidden="true">  Send Us An Email</span>
+                </button>
+            </div>
         </div>
-
     </div>
 </div>
 {% endblock %}

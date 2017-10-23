@@ -1,9 +1,14 @@
-from car_sales import db
-from flask_login import UserMixin, current_user
-from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
-from sqlalchemy.sql.expression import func, select
 from math import ceil
+
+from flask_login import UserMixin
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.sql.expression import func
+from werkzeug.security import check_password_hash, generate_password_hash
+
+from flask_paginate import Pagination
+
+db = SQLAlchemy()
 
 
 class Makes(db.Model):
@@ -25,9 +30,6 @@ class UsedStock(db.Model):
     __tablename__ = 'used_stock'
     __table_args__ = {'extend_existing': 'True'}
     id = db.Column(db.Integer, primary_key=True)
-    make = db.relationship('Makes', lazy='joined',
-                            backref=db.backref('make_name', lazy='dynamic'))
-    make_id = db.Column(db.Integer, db.ForeignKey("makes.id"))
     model = db.relationship('Models', lazy='joined',
                            backref=db.backref('models', lazy='dynamic'))
     model_id = db.Column(db.Integer, db.ForeignKey("models.id"))
@@ -47,13 +49,23 @@ class UsedStock(db.Model):
     def get_all_used_stock():
         return UsedStock.query.all()
 
-    @staticmethod
-    def get_used_stock_by_id(stock_id):
-        return UsedStock.query.filter_by(id=stock_id).first_or_404()
+    # @staticmethod
+    # def search_make_model(make, model):
+    #     return db.session.query_property(UsedStock.model.make.like(make), UsedStock.model.like(model))
 
     @staticmethod
-    def feature_home_page_stock_item():
-        return UsedStock.query.filter_by(sold=False).order_by(func.random()).first_or_404()
+    def paginate_stock_queries(request, queried_stock, page, per_page):
+        search = False
+        q = request.args.get('q')
+        if q:
+            search = True
+
+        return Pagination(page=page, per_page=per_page, total=len(queried_stock), search=search,
+                          record_name='Used Stock', css_framework='bootstrap3')
+
+    @staticmethod
+    def pagination_offset(page, per_page):
+        return page * per_page - per_page
 
     def __str__(self):
         return self.make
@@ -113,9 +125,9 @@ class CarSale(db.Model):
     def serialize(self):
         return {
             'id': self.id,
-            'order_date': self.order_date.strftime('%Y-%m-%dT%H:%M:%S'),
+            'order_date': self.order_date.strftime('%Y-%m-%d'),
             'used_stock_id': self.used_stock_id,
-            'make': self.used_stock.make.name,
+            'make': self.used_stock.model.make.name,
             'model': self.used_stock.model.name,
             'year': self.used_stock.year,
             'fuel_type': self.used_stock.fuel_type,
@@ -128,7 +140,7 @@ class CarSale(db.Model):
         }
 
 
-class Pagination(object):
+class PaginationObject(object):
 
     def __init__(self, page, per_page, total_count):
         self.page = page

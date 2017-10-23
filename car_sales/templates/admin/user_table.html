@@ -22,7 +22,6 @@ Users
     </thead>
     <tbody>
     {% for user in users %}
-
         <tr>
             <td>{{ user.id }}</td>
             <td>{{ user.first_name }}</td>
@@ -30,14 +29,14 @@ Users
             <td>{{ user.email }}</td>
             <td>{{ user.is_active }}</td>
             <td>
-                <a type=button"  data-toggle="tooltip" title="Edit User"
-                        href="{{ url_for('edit_user', user_id=user.id) }}">
+                <a type="button"  data-toggle="tooltip" title="Edit User"
+                        href="{{ url_for('root.edit_user', user_id=user.id) }}">
                     <span class="fa fa-pencil fa-2x"></span>
                 </a>
             </td>
             <td>
                 <a type="button" class="{{ 'disabled' if not user.is_active }}" data-toggle="tooltip" title="Disable User"
-                        href="{{ url_for('disable_user', user_id=user.id) }}">
+                        href="{{ url_for('root.disable_user', user_id=user.id) }}">
                     <span class="fa fa-ban fa-2x"></span>
                 </a>
             </td>
@@ -45,5 +44,5 @@ Users
     {% endfor %}
     </tbody>
 </table>
-<a href="{{ url_for('signup') }}"><span class="fa fa-plus fa-2x" data-toggle="tooltip" title="Add User"></span> </a>
+<a href="{{ url_for('root.signup') }}"><span class="fa fa-plus fa-2x" data-toggle="tooltip" title="Add User"></span> </a>
 {% endblock %}
