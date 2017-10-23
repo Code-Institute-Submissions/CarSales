@@ -2,16 +2,16 @@
 
 ## Overview
 
-### What is this app for?
+### Who/What is this app for?
  
-Front-end and Back-end website used for a small family owned car dealership business. 
+The *Car Sales* application has been designed to act as an online platform for a samll, local car dealership to show their wares to the general public. While also providing a back-end for the business owner to manage stock and get basic reports based on the sales history of the business. 
  
 ### What does it do?
  
-The application serves both the general public and the owner/staff of the business.
+The application serves both the general public through a bootstrap designed front-end and the owner/staff of the business with a mySql database tied together with a python/Flask back-end.
 
 
-### Existing Features. 
+### Current Features. 
 
 Public:
   - Homepage. Has brief description of company (pulled from local dealership). Had the same basic search feature and a random usedstock item (removed these because of sql query timeouts) 
@@ -30,9 +30,10 @@ Staff:
 
 
 ### Development Issues
-  - **Fixed** Flask-Paginate - The last page of the flask paginate query is alwas empty. No matter how much data goes into the database or the query filters. 
+  - **Fixed** Flask-Paginate - The last page of the flask paginate query was always empty. It was resolved by multiplying the page number by the page_sze then subtracting the page size from the sum.  
   - Operational Error 'Lost Connection To Database'. It happens because MySQL doesn't receive a complete answer from the server. It primarily haapens with the User table. If the website is left idle for over 60 seconds, ** This is apparently normal behaviour for clearDB **. The solution I have found is to set the pool recycling to a number higher that the default. This does not make a difference. I still receive the error.  I have found [this](https://www.cleardb.com/blog/entry?id=common-problems-2) on the *ClearDB* site, which appears to mention a similar issue. 
   - Sales Bar Chart - I can't seem to get a bar chart to render using order dates. The grouping has the expected data it just doesn't appear on the graph. 
+  This project is not fully polished, unfortunately because of work restrictions, I am handing in with the above issues. I have spent close to 12 weeks on this project and feel like I need to move on.  
   
 
 ## Tech Used
@@ -58,5 +59,5 @@ Staff:
     - The three packages above are used to manipulate and display our data in some way or another. 
 
 
-Credit: I received some advice on how to use Blueprints in Flask from a former colleague. 
-        There was a lot of reading and copy/pasting of code when setting up the cleardb add-on in Heroku with gunicorn. So stackoverflow and the heroku tutorial deserves credit here.
+Credit: I received some advice on how to use Blueprints in Flask from a former colleague, along with the Flask microFramework course material provided on Pluralsight. 
+        There was a lot of reading and copy/pasting of code when setting up the cleardb add-on in Heroku with gunicorn. So ClearDb blogs, stackoverflow and the heroku tutorials deserves credit here.

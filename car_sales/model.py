@@ -65,7 +65,7 @@ class UsedStock(db.Model):
 
     @staticmethod
     def pagination_offset(page, per_page):
-        return page * per_page - per_page
+        return (page * per_page) - per_page
 
     def __str__(self):
         return self.make
