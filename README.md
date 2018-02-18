@@ -1,4 +1,7 @@
 # Car Sales - Stream 2 Final Project
+[Website](https://powerful-thicket-24705.herokuapp.com/)
+Login details: horan5034@gmail.com
+Password: P@ssw0rd
 
 ## Overview
 
@@ -31,7 +34,9 @@ Staff:
 
 ### Development Issues
   - **Fixed** Flask-Paginate - The last page of the flask paginate query was always empty. It was resolved by multiplying the page number by the page_sze then subtracting the page size from the sum.  
-  - Operational Error 'Lost Connection To Database'. It happens because MySQL doesn't receive a complete answer from the server. It primarily haapens with the User table. If the website is left idle for over 60 seconds, ** This is apparently normal behaviour for clearDB **. The solution I have found is to set the pool recycling to a number higher that the default. This does not make a difference. I still receive the error.  I have found [this](https://www.cleardb.com/blog/entry?id=common-problems-2) on the *ClearDB* site, which appears to mention a similar issue. 
+  - Operational Error 'Lost Connection To Database'. It happens because MySQL doesn't receive a complete answer from the server. It primarily haapens with the User table. If the website is left idle for over 60 seconds,
+  ** This is apparently normal behaviour for clearDB **. The solution I have found is to set the pool recycling to a number higher that the default. This does not make a difference. I still receive the error.
+  I have found [this](https://www.cleardb.com/blog/entry?id=common-problems-2) on the *ClearDB* site, which appears to mention a similar issue.
   - Sales Bar Chart - I can't seem to get a bar chart to render using order dates. The grouping has the expected data it just doesn't appear on the graph. 
   This project is not fully polished, unfortunately because of work restrictions, I am handing in with the above issues. I have spent close to 12 weeks on this project and feel like I need to move on.  
   
